@@ -1,0 +1,2 @@
+<!--pages/home/home.wxml-->
+<navigation-bar title="首页" back="{{ false }}" background="#ffffff" color="#000000" />
