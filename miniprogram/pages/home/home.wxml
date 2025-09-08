@@ -1,2 +1,28 @@
 <!--pages/home/home.wxml-->
 <navigation-bar title="首页" back="{{ false }}" background="#ffffff" color="#000000" />
+
+<swiper indicator-dots="{{true}}" autoplay="{{true}}" interval="{{3000}}" duration="{{500}}" circular="true">
+  <block wx:for="{{pointsBannerList}}" wx:key="index">
+    <swiper-item>
+      <navigator class="swpier-item" url="/packageA/pages/goods_detail/goods_detail?goods_id={{item.banner_value}}">
+        <image class="swiper-image" src="{{item.banner_img_src}}" />
+      </navigator>
+    </swiper-item>
+  </block>
+</swiper>
+<van-toast id="van-toast" />
+
+<scroll-view class="category-list" scroll-x="true" scroll-with-animation="true">
+  <block wx:for="{{categoryList}}" wx:key="id">
+    <view class="category-item" wx:for="{{item.child}}" wx:key="id" wx:for-item="child" bindtap="handlerCate" data-id="{{child.id}}">
+      <image class="cate-img" src="{{child.image_url}}" mode="aspectFill" />
+      <view class="cate-content">
+        <text class="cate-title">{{child.name}}</text>
+        <view class="cate-more">
+          <text class="more-text">VIEW MORE</text>
+          <image class="more-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-homeviewmore.png" mode="aspectFit" />
+        </view>
+      </view>
+    </view>
+  </block>
+</scroll-view>

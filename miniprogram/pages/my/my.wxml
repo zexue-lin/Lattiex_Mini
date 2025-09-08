@@ -1,2 +1,2 @@
 <!--pages/my/my.wxml-->
-<text>pages/my/my.wxml</text>
+<navigation-bar title="我的" back="{{ false }}" background="#ffffff" color="#000000" />

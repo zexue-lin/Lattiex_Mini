@@ -1,0 +1,4 @@
+<!--packageA/pages/goods_detail/goods_detail.wxml-->
+<navigation-bar title="商品详情" back="{{ true }}" background="#ffffff" color="#000000" />
+
+<text>商品详情页面</text>

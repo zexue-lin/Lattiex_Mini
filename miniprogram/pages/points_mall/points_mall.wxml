@@ -1,2 +1,2 @@
 <!--pages/points_mall/points_mall.wxml-->
-<text>pages/points_mall/points_mall.wxml</text>
+<navigation-bar title="积分商城" back="{{ false }}" background="#ffffff" color="#000000" />

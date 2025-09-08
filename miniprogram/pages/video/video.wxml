@@ -1,2 +1,2 @@
 <!--pages/video/video.wxml-->
-<text>pages/video/video.wxml</text>
+<navigation-bar title="穿搭" back="{{ false }}" background="#ffffff" color="#000000" />

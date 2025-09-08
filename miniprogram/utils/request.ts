@@ -30,29 +30,41 @@ class Request {
     this.responseInterceptor = interceptor
   }
 
-  get(url: string, data: Record<string, any> = {}) {
-    return this._request({ url, method: 'GET', data })
+  get<T = any>(url: string, data: Record<string, any> = {}): Promise<T> {
+    return this._request<T>({ url, method: 'GET', data })
   }
 
-  post(url: string, data: Record<string, any> = {}) {
-    return this._request({ url, method: 'POST', data })
+  post<T = any>(url: string, data: Record<string, any> = {}): Promise<T> {
+    return this._request<T>({ url, method: 'POST', data })
   }
 
-  put(url: string, data: Record<string, any> = {}) {
-    return this._request({ url, method: 'PUT', data })
+  put<T = any>(url: string, data: Record<string, any> = {}): Promise<T> {
+    return this._request<T>({ url, method: 'PUT', data })
   }
 
-  delete(url: string, data: Record<string, any> = {}) {
-    return this._request({ url, method: 'DELETE', data })
+  delete<T = any>(url: string, data: Record<string, any> = {}): Promise<T> {
+    return this._request<T>({ url, method: 'DELETE', data })
   }
 
-  private async _request(options: RequestOptions) {
+  private async _request<T = any>(options: RequestOptions): Promise<T> {
+    // 判断是不是完整的url
+    const isAbsolute = options.url?.startsWith('http')
+
+    // 如果是完整的Url，就直接用，不拼接 baseUrl
+    // 如果不是完整的Url，就认为是走baseUrl （通常的POST，需要传 method 等）
+    let reqUrl = ''
+    if (isAbsolute) {
+      reqUrl = options.url! // !作用：告诉 TypeScript 编译器：“我知道这个值不会是 null 或 undefined，不要报错”。
+    } else {
+      reqUrl = this.baseUrl // ✅ 不拼接，而是直接走 baseUrl
+    }
+
     // 合并配置
     let reqOptions: RequestOptions = {
-      url: this.baseUrl + (options.url || ''),
+      url: reqUrl,
       method: options.method || 'GET',
       data: options.data || {},
-      header: { ...this.header, ...(options.header || {}) }
+      header: { ...this.header, ...(options.header || {}) },
     }
 
     // 请求拦截器
@@ -60,20 +72,20 @@ class Request {
       reqOptions = await this.requestInterceptor(reqOptions)
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
       wx.request({
         url: reqOptions.url!,
         method: reqOptions.method!,
         data: reqOptions.data,
         header: reqOptions.header,
-        success: async (res) => {
+        success: async res => {
           let result: any = res
           if (this.responseInterceptor) {
             result = await this.responseInterceptor(res)
           }
-          resolve(result)
+          resolve(result as T) // ✅ 返回泛型
         },
-        fail: (err) => reject(err)
+        fail: err => reject(err),
       })
     })
   }

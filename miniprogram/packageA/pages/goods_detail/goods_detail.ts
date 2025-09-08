@@ -1,9 +1,7 @@
-// pages/cart/cart.ts
-import { createStoreBindings } from 'mobx-miniprogram-bindings'
-import { store } from '../../store/store'
+// packageA/pages/goods_detail/goods_detail.ts
 Page({
 
-  /** 
+  /**
    * 页面的初始数据
    */
   data: {
@@ -14,11 +12,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad() {
-    this.storeBindings = createStoreBindings(this,{
-      store,
-      fields: ['numA','numB','sum'],
-      actions: ['updateNum1'],
-    })
+
   },
 
   /**
@@ -46,7 +40,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    this.storeBindings.destroyStoreBindings()
+
   },
 
   /**
@@ -68,11 +62,5 @@ Page({
    */
   onShareAppMessage() {
 
-  },
-
-  btnHandler1(e){
-    this.updateNum1(e.target.dataset.step)
-  },
-
-
+  }
 })

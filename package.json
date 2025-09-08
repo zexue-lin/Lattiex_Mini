@@ -14,5 +14,13 @@
     "miniprogram-api-typings": "^4.0.1"
   },
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zexue-lin/Lattiex_Mini.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zexue-lin/Lattiex_Mini/issues"
+  },
+  "homepage": "https://github.com/zexue-lin/Lattiex_Mini#readme",
   "description": ""
 }
