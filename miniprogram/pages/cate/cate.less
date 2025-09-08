@@ -1,0 +1,32 @@
+/* pages/cate/cate.wxss */
+.scroll-view-container {
+  display: flex;
+
+  .left-scroll-view {
+    width: 200rpx;
+    height: 300rpx;
+
+    .left-scroll-view-item {
+      background-color: #f7f7f7;
+      line-height: 80rpx;
+      text-align: center;
+
+      &.active {
+        background-color: #fff;
+        position: relative;
+
+        &::before {
+          content: '';
+          display: block;
+          width: 6rpx;
+          height: 40rpx;
+          background-color: #C00000;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}

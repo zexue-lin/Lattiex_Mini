@@ -5,6 +5,7 @@
     "pages/points_mall/points_mall",
     "pages/cart/cart",
     "pages/my/my",
+    "pages/cate/cate",
     "pages/index/index",
     "pages/logs/logs"
   ],
@@ -12,7 +13,8 @@
     {
       "root" :"packageA",
       "pages": [
-        "pages/goods_detail/goods_detail"
+        "pages/goods_detail/goods_detail",
+        "pages/goods_list/goods_list"
       ]
     }
   ],
