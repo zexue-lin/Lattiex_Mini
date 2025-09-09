@@ -48,7 +48,7 @@ class Request {
 
   private async _request<T = any>(options: RequestOptions): Promise<T> {
     // 判断是不是完整的url
-    const isAbsolute = options.url?.startsWith('http')
+    const isAbsolute = options && typeof options.url === 'string' && options.url.startsWith('http')
 
     // 如果是完整的Url，就直接用，不拼接 baseUrl
     // 如果不是完整的Url，就认为是走baseUrl （通常的POST，需要传 method 等）

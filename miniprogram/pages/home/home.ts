@@ -82,9 +82,12 @@ Page({
    */
 
   handlerCate(e) {
-    console.log(e.currentTarget.dataset.id)
+    // console.log(e.currentTarget.dataset.id)
     const cateId = e.currentTarget.dataset.id
     Toast.success(cateId)
+    wx.navigateTo({
+      url: '/pages/cate/cate',
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

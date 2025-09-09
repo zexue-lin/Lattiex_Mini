@@ -23,8 +23,8 @@ const devConfig = {
 }
 
 // 当前使用的环境（切换只改这里）
-export const currentEnv = Env.PROD
-// export const currentEnv = Env.DEV
+// export const currentEnv = Env.PROD
+export const currentEnv = Env.DEV
 
 // 最终导出配置
 export const config = currentEnv === Env.PROD ? prodConfig : devConfig
