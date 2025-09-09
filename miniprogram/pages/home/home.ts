@@ -84,7 +84,6 @@ Page({
   handlerCate(e) {
     // console.log(e.currentTarget.dataset.id)
     const cateId = e.currentTarget.dataset.id
-    Toast.success(cateId)
     wx.navigateTo({
       url: '/pages/cate/cate',
     })

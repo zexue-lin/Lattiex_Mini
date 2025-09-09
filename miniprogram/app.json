@@ -14,7 +14,8 @@
       "root" :"packageA",
       "pages": [
         "pages/goods_detail/goods_detail",
-        "pages/goods_list/goods_list"
+				"pages/goods_list/goods_list",
+				"pages/search/search"
       ]
     }
   ],
