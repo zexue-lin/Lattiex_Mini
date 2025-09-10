@@ -1,9 +1,34 @@
 <!--packageA/pages/search/search.wxml-->
 <navigation-bar title="搜索" back="{{ true }}" background="#ffffff" color="#000000">
-  <!-- 在右侧放一个按钮 -->
-  <!-- <view slot="right" bindtap="onSearchTap">
-      <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
-    </view> -->
+	<!-- 在右侧放一个按钮 -->
+	<!-- <view slot="right" bindtap="onSearchTap">
+        <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
+      </view> -->
 </navigation-bar>
 
 <van-search value="{{ value }}" clearable="{{ true }}" focus="{{ true }}" bind:change="onChange" placeholder="请输入搜索关键词" />
+
+<block wx:if="{{suggestionsList.length}}">
+	<view class="sugg-list">
+		<view class="sugg-item" wx:for="{{suggestionsList}}" wx:key="id" data-id="{{item.id}}" bindtap="gotoGoodsDetail">
+			<view class="goods-name">{{item.name}}</view>
+			<van-icon name="arrow" size="20px" />
+		</view>
+	</view>
+</block>
+
+<block wx:else>
+	<view class="history-box">
+		<van-cell title="搜索历史">
+			<van-icon slot="right-icon" name="delete-o" class="custom-icon" size="16px" bindtap="clearHistory" />
+		</van-cell>
+
+		<view class="history-list">
+			<!-- 当你使用 *this 作为 wx:key 的值时，意思是：用数组中的每一项本身的值作为 key。*this 适用于数组中的每一项本身就是唯一且稳定的值的情况 对象就可以出问题-->
+			<view class="tag-wrap" wx:for="{{historyList}}" wx:key="*this" bindtap="gotoGoodsList" data-kw="{{item}}">
+				<van-tag type="primary" size="large">{{item}}</van-tag>
+				<view class="tap-mask"></view>
+			</view>
+		</view>
+	</view>
+</block>

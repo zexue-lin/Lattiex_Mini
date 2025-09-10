@@ -1,1 +1,41 @@
 /* packageA/pages/search/search.wxss */
+.sugg-list {
+  padding: 0 10rpx;
+
+  .sugg-item {
+    font-size: 26rpx;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #efefef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .goods-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 5rpx;
+    }
+  }
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 10rpx;
+
+  .tag-wrap {
+    position: relative;
+    display: inline-block;
+
+    .tap-mask {
+      position: absolute;
+      inset: 0;
+    } /* 占满整个 tag，可点 */
+    .van-tag {
+      margin: 10rpx;
+      background-color: #efefef;
+      color: #000;
+    }
+  }
+}

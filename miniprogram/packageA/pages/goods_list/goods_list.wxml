@@ -1,7 +1,7 @@
 <!--packageA/pages/goods_list/goods_list.wxml-->
-<navigation-bar title="商品列表"  back="{{ true }}" background="#ffffff" color="#000000" fade-with-scroll="{{ false }}" fade-range="{{ 200 }}" scroll-top="{{ scrollTop }}" bind:ready="onNavReady">
-  <!-- 在右侧放一个按钮 -->
-  <!-- <view slot="right" bindtap="onSearchTap">
+<navigation-bar title="商品列表" back="{{ true }}" background="#ffffff" color="#000000">
+	<!-- 在右侧放一个按钮 -->
+	<!-- <view slot="right" bindtap="onSearchTap">
       <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
     </view> -->
 </navigation-bar>
