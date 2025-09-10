@@ -103,9 +103,9 @@ Page({
 
   // 点击事件-------------
   gotoGoodsDetail(e) {
-    const goodsId = e.currentTarget.dataset.id;
+    const goods_id = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: `/packageA/pages/goods_detail/goods_detail?goodsId=${goodsId}`,
+      url: `/packageA/pages/goods_detail/goods_detail?goods_id=${goods_id}`,
     });
   },
 
