@@ -1,16 +1,112 @@
 <!--packageA/pages/goods_detail/goods_detail.wxml-->
 <navigation-bar title="商品详情" back="{{ true }}" background="#ffffff" color="#000000" />
 
-<view class="goodsDeailContainer">
+<view class="goodsDetailContainer">
 	<!-- 商品轮播图 -->
 	<view class="banner">
 		<swiper class="banner-swiper" indicator-dots="{{false}}" autoplay="{{false}}" current="{{currentSwiper}}" bindchange="swiperChange">
 			<!-- ⭐ 视频滑块：仅当有视频地址时渲染，并排在第一位 -->
 			<swiper-item wx:if="{{goods_info.video_url}}">
 				<!-- 真正的视频组件 -->
-				<video class="real-video" id="swiperVideo" data-idx="0" src="{{goods_info.video_url}}">
+				<video class="real-video" id="swiperVideo" data-idx="0" src="{{goods_info.video_url}}" controls="{{ true }}" show-center-play-btn="{{ false }}" enable-play-gesture="{{ true }}" object-fit="cover" autoplay="{{ true }}" muted="{{ isMuted }}" catchtap="openViewer" loop>
+
+					<!-- 音量 / 静音按钮：外层 view 做圆形底，内放图标  目前显示不出来，因为不能覆盖原生的video-->
+					<view class="mute-btn" catchtap="toggleMute" wx:if="{{ modalOpen }}">
+						<cover-image class="mute-icon" src="{{  isMuted ? 'https://zhenda.wdzhengda.com/uploads/home/ic-mute.png' : 'https://zhenda.wdzhengda.com/uploads/home/ic-volume.png' }}" mode="widthFix" />
+					</view>
 				</video>
 			</swiper-item>
+
+			<!-- 图片滑块：保留原逻辑 -->
+			<block wx:for="{{ goods_info.album }}" wx:key="index">
+				<swiper-item>
+					<image class="swiper-img" src="{{ item }}" mode="aspectFill" data-idx="{{ index + (goods_info.video_url ? 1 : 0) }}" catchtap="openViewer" />
+				</swiper-item>
+			</block>
 		</swiper>
+
+		<!-- 自定义计数器：总数 = 图片张数 + 1（若有视频） -->
+		<view class="bannerNum"> {{ currentSwiper + 1 }}/{{ totalSwiper }} </view>
+	</view>
+
+	<!-- 商品信息 -->
+	<view class="goods-info-container">
+		<!-- 商品基本信息 -->
+		<view class="goods-info">
+			<text class="goodsname">{{ goods_info.name }}</text>
+			<view class="price-row">
+				<!-- 积分价格 -->
+				<view wx:if="{{ goods_info.show_type == 2 || goods_info.show_type == 4 }}">
+					<text class="price">{{ goods_info.price }}</text>
+					<text class="price-unit"> 积分</text>
+				</view>
+				<!-- 普通价格 -->
+				<text class="price" wx:else> ¥{{ goods_info.price }} </text>
+				<text class="sales" wx:if="{{ showSalesVolume }}"> 已售 {{ goods_info.buy_count || 0 }} </text>
+				<view class="shareIcon">
+					<image class="like-btn" src="{{ goods_info.isfav ? 'https://zhenda.wdzhengda.com/uploads/home/ic-like-yes.png' : 'https://zhenda.wdzhengda.com/uploads/home/ic-like-not@2x.png' }}" mode="aspectFit" bindtap="handleLike" />
+					<view class="share-wrap">
+						<image class="share-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-share-detail@2x.png" mode="aspectFit" />
+						<!-- 覆盖在上面的透明按钮，仅负责触发分享 -->
+						<button class="share-overlay" open-type="share" hover-class="none"></button>
+					</view>
+				</view>
+
+			</view>
+		</view>
+
+		<!-- 服务／物流／运费险一行排列 -->
+		<view class="service-row">
+			<!-- 保障 -->
+			<view class="service-item" bindtap="onShowFwsm">
+				<image class="service-icon" style="height: 25rpx !important" src="https://zhenda.wdzhengda.com/uploads/home/ic-service@2x.png"></image>
+				<text>服务保障</text>
+			</view>
+			<!-- 物流 -->
+			<view class="service-item info-item">
+				<image class="service-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-logistics@2x.png"></image>
+				<text>24小时内发货</text>
+			</view>
+			<!-- 运费险 -->
+			<view class="service-item" bindtap="onShowYfx">
+				<image class="service-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-insurance@2x.png"></image>
+				<text>运费险</text>
+			</view>
+		</view>
+		<!-- 两个弹窗 -->
+		<van-action-sheet show="{{ showfwsm }}" title="服务说明" bind:close="onCloseFwsm">
+			<view class="model-content">
+				<!-- 商品列表区域 -->
+				<scroll-view class="fwsm-list" wx:if="{{ goods_info.goods_ensure.length > 0 }}" scroll-y>
+					<view class="fwsm-item" wx:for="{{ goods_info.goods_ensure }}" wx:key="id" data-id="{{ item.id }}" data-index="{{ index }}">
+						<view class="fwsm-content-info">
+							<image class="fwsm-img" src="https://zhenda.wdzhengda.com/uploads/home/ic-seleted-cir.png" mode="aspectFit"></image>
+							<view class="fwsm-text">{{ item.name }}</view>
+						</view>
+					</view>
+				</scroll-view>
+				<!-- 空状态 -->
+				<view wx:else>
+					<van-empty description="暂无服务说明">
+					</van-empty>
+				</view>
+				<button class="confirm-btn" bindtap="onCloseFwsm">我知道了</button>
+			</view>
+		</van-action-sheet>
+		<van-action-sheet show="{{ showyfx }}" title="运费险" bind:close="onCloseYfx">
+			<view class="model-content">
+				<text class="insurance-desc" user-select="{{true}}">当发生退货退款时，若选择“上门取件”退货，则可享受一定金额的蚂蚁保退货运费险补贴，运费险可抵扣运费首重金额<text class="link" bindtap="openFreightInsuranceIntro">《运费险介绍》</text>，补贴自动打款到快递公司，退货商品运费超出首重保额时，则需您自行补齐差价。若选择“自行寄回”退货，则不享受退货运费险补贴。</text>
+				<button class="confirm-btn" bindtap="onCloseYfx">我知道了</button>
+			</view>
+		</van-action-sheet>
+		<!-- 商品详情 -->
+		<view class="param-section">
+			<text class="detail-title title">商品详情</text>
+			<!-- 折叠时显示的部分参数 -->
+			<view class="param-row" wx:for="{{ goods_param }}" wx:key="index">
+				<text class="param-label">· {{ item.name }}</text>
+				<text class="param-value">{{ item.value }}</text>
+			</view>
+		</view>
 	</view>
 </view>
