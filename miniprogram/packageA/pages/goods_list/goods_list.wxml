@@ -6,8 +6,14 @@
     </view> -->
 </navigation-bar>
 
-<view class="goods_list">
-	<block wx:for="{{goodsList}}" wx:key="id">
-		<van-card num="{{item.stock}}" price="{{item.price}}" desc="描述信息" title="{{item.name}}" thumb="{{ item.image_url }}" data-id="{{item.id}}" link-type="navigateTo" bindtap="gotoGoodsDetail" />
+<block wx:if="{{goodsList && goodsList.length > 0}}">
+	<block wx:for="{{goodsList}}" wx:key="id" wx:for-item="item" wx:for-index="idx">
+		<view class="goods_list" data-id="{{item.id}}" bindtap="gotoGoodsDetail">
+			<van-card num="{{ item.stock }}" price="{{ item.price }}" desc="{{ item.desc || '' }}" title="{{ item.name }}" thumb="{{ item.image_url }}" />
+		</view>
 	</block>
-</view>
+</block>
+
+<block wx:else>
+	<van-empty description="暂无商品" />
+</block>

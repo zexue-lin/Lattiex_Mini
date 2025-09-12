@@ -108,5 +108,119 @@
 				<text class="param-value">{{ item.value }}</text>
 			</view>
 		</view>
+
+		<!-- 尺码指南 -->
+		<van-collapse value="{{ Size }}" bind:change="onChangeSize" border="{{false}}">
+			<van-collapse-item name="1" border="{{false}}">
+				<view slot="title">尺码指南</view>
+				<scroll-view class="size-card-srcoll" scroll-x="true" show-scrollbar="false">
+					<view class="size-card-wrap">
+						<view class="size-card" wx:for="{{ sizeCards }}" wx:key="idx" wx:for-item="card">
+							<view class="pair" wx:for="{{ card.pairs }}" wx:key="pIdx" wx:for-item="p">
+								<text class="attr">{{ p.label }}</text>
+								<text class="val">{{ p.value }}</text>
+							</view>
+							<text class="size-tag">{{ card.size }}</text>
+						</view>
+					</view>
+					<!-- <text class="tips">温馨提示：因测量方式不同，如有 1‑3 cm 误差属合理范围</text>-->
+				</scroll-view>
+			</van-collapse-item>
+		</van-collapse>
+
+		<!-- 质检报告 -->
+		<van-collapse value="{{ Quality }}" bind:change="onChangeQuality" border="{{false}}">
+			<van-collapse-item name="1" border="{{false}}">
+				<view slot="title">质检报告
+				</view>
+				<!-- 若有质检报告图片 -->
+				<view wx:if="{{ goods.quality_images.length > 0 }}" class="copyright-list">
+					<image wx:for="{{ goods.quality_images }}" wx:key="index" class="copyright-img" src="{{ item.image_path }}" mode="widthFix" />
+				</view>
+				<!-- 无数据空态 -->
+				<view wx:else>
+					<van-empty description="等待商家上传～">
+					</van-empty>
+				</view>
+			</van-collapse-item>
+		</van-collapse>
+
+		<!-- 原创声明 -->
+		<van-collapse value="{{ Copyright }}" bind:change="onChangeCopyright" border="{{false}}">
+			<van-collapse-item name="1" border="{{false}}">
+				<view slot="title">原创声明
+				</view>
+				<!-- 若有版权图片 -->
+				<view class="copyright-list">
+					<!-- 永远显示在第一个，固定第一张 -->
+					<image class="copyright-img" src="https://zhenda.wdzhengda.com/uploads/home/ycsmbn-detail@2x.png" mode="widthFix" />
+					<image wx:for="{{ goods.copyright_images }}" wx:key="index" class="copyright-img" src="{{ item.image_path }}" mode="widthFix" />
+				</view>
+			</van-collapse-item>
+		</van-collapse>
+
+		<!-- 购买须知 -->
+		<van-collapse value="{{ purchaseNotice }}" bind:change="onChangePurchaseNotice" border="{{false}}">
+			<van-collapse-item name="1" border="{{false}}">
+				<view slot="title">购买须知
+				</view>
+				<!-- 有 htmlNodes 就渲染 -->
+				<scroll-view scroll-y class="gmxz-scroll" style="max-height: 40vh;">
+					<!-- 这里按需改高度 -->
+					<rich-text nodes="{{ gmxzNodes }}"></rich-text>
+				</scroll-view>
+
+				<!-- 第一次加载中的骨架屏 -->
+				<view wx:if="{{ !gmxzNodes && loadingGmxz }}" class="gmxz-loading">
+					<text>加载中…</text>
+				</view>
+
+				<!-- 加载失败 -->
+				<view wx:if="{{ loadFailGmxz }}" class="gmxz-error">
+					<text>加载失败，点击重试</text>
+					<button size="mini" bindtap="fetchGmxz">重试</button>
+				</view>
+			</van-collapse-item>
+		</van-collapse>
+
 	</view>
+
+	<!-- 商品导航 -->
+	<van-goods-action>
+		<van-goods-action-icon icon="chat-o" text="客服" bind:click="onClickKF" />
+		<van-goods-action-icon icon="cart-o" text="购物车" info="5" bind:click="onClickCart" />
+		<van-goods-action-icon icon="shop-o" text="店铺" bind:click="onClickShop" />
+		<van-goods-action-button color="#be99ff" text="加入购物车" type="warning" bind:click="openDialog" data-type="addCart" />
+		<van-goods-action-button color="#7232dd" text="立即购买" bind:click="openDialog" data-type="buy" />
+	</van-goods-action>
+
+	<van-action-sheet show="{{ showPurchasePop }}" title=" " bind:close="onClosePurchasePop">
+		<view class="pop-box">
+			<view class="dialog-header">
+				<image class="dialog-header-img" src="{{ productBean.image_path}}" mode="aspectFill"></image>
+				<view class="dialog-header-info">
+					<view wx:if="{{ goods_info.show_type == 2 || goods_info.show_type == 4 }}">
+						<text class="dialog-price">{{ productBean.price }} 积分</text>
+					</view>
+					<view wx:else>
+						<text class="dialog-price">￥{{ productBean.price }}</text>
+					</view>
+
+
+					<text class="dialog-stock">库存：{{ productBean.stock }}</text>
+					<view class="dialog-selected">
+						已选：
+						<block wx:for="{{ selectedSpecs }}" wx:for-item="value" wx:for-index="key" wx:key="key">
+							<text>{{ key }}：{{ value }} </text>
+						</block>
+					</view>
+					<!-- <view class="dialog-selected">{{selectedSpecs}}</view> -->
+				</view>
+				<!-- <image class="dialog-close" src="https://zhenda.wdzhengda.com/uploads/home/ic-loginclose.png" mode="aspectFill" bindtap="closeDialog"></image> -->
+			</view>
+			<van-button color="#7232dd">单色按钮</van-button>
+		</view>
+	</van-action-sheet>
+	<!-- Toast -->
+	<van-toast id="van-toast" />
 </view>

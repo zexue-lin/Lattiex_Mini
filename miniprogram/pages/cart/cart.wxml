@@ -1,5 +1,5 @@
 <!--pages/cart/cart.wxml-->
 <navigation-bar title="购物车" back="{{ false }}" background="#ffffff" color="#000000" />
-<view>{{numA}} + {{numB}} = {{sum}}</view>
-<van-button type="primary" bindtap="btnHandler1" data-step="{{1}}">numA+1</van-button>
-<van-button type="danger" bindtap="btnHandler1" data-step="{{-1}}">numA-1</van-button>
+<view>{{numA}} + {{numB}} = {{cartNum}}</view>
+<van-button type="primary" bindtap="btnHandler1" data-step="{{1}}">cartNum+1</van-button>
+<van-button type="danger" bindtap="btnHandler1" data-step="{{-1}}">cartNum-1</van-button>

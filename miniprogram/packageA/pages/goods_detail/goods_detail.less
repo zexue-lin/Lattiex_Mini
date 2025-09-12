@@ -252,5 +252,129 @@
         }
       }
     }
+    .van-cell {
+      padding: 20rpx 0;
+    }
+    .size-card-srcoll {
+      .size-card-wrap {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20rpx; /* 卡片间距 */
+        .size-card {
+          flex: 0 0 245rpx; /* 宽度固定，不伸缩 */
+          width: 235rpx;
+          background: #f5f5f5;
+          padding: 32rpx 15rpx 100rpx;
+          box-sizing: border-box;
+          position: relative;
+          .pair {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24rpx;
+          }
+
+          .attr {
+            font-family: "AlibabaPuHuiTi-45";
+            font-size: 20rpx;
+            color: #8b8b8b;
+            width: 110rpx;
+          }
+
+          .val {
+            font-family: "Hanchansans-Regular";
+            font-size: 22rpx;
+            color: #000;
+            flex: 1; /* 占剩余空间 */
+            /* margin-left: 38rpx; */
+            text-align: left;
+          }
+
+          /* 底部大号尺码 */
+          .size-tag {
+            font-family: "Hanchansans-Regular";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 16rpx;
+            text-align: center;
+            font-size: 60rpx;
+            font-weight: 600;
+            color: #000;
+          }
+        }
+      }
+    }
+    .van-collapse-item__content {
+      padding: 0;
+    }
+    .copyright-list {
+      padding: 20rpx 0;
+      background: #fff;
+      .copyright-img {
+        width: 100%;
+        display: block;
+        margin-bottom: 20rpx;
+      }
+    }
+    .gmxz-wrapper {
+      padding: 24rpx 32rpx;
+      background: #fafafa;
+      border-radius: 16rpx;
+    }
+
+    .gmxz-scroll {
+      /* 若想更灵活，也可以写 max-height:60vh;  */
+      max-height: 520rpx;
+      /* rich-text 内图片自适应，文字排版可再调 */
+      .gmxz-scroll rich-text {
+        font-size: 28rpx;
+        line-height: 1.8;
+        color: #333;
+      }
+      .gmxz-scroll rich-text img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .pop-box {
+    box-sizing: border-box;
+    padding: 20rpx;
+    /* 头部 */
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 32rpx;
+      .dialog-header-img {
+        width: 120rpx;
+        height: 120rpx;
+        border-radius: 8rpx;
+        margin-right: 20rpx;
+      }
+      .dialog-header-info {
+        flex: 1;
+        .dialog-price {
+          font-family: Hanchansans-Regular;
+          font-size: 40rpx;
+          color: #000;
+          display: block;
+        }
+        .dialog-stock {
+          font-size: 24rpx;
+          color: #999;
+          display: block;
+          margin-bottom: 8rpx;
+        }
+        .dialog-selected {
+          font-size: 24rpx;
+          color: #333;
+        }
+      }
+      .dialog-close {
+        width: 57rpx;
+        height: 57rpx;
+      }
+    }
   }
 }

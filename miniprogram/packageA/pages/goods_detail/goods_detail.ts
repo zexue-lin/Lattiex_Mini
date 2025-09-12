@@ -1,3 +1,7 @@
+import { reserveArrayBuffer } from "mobx-miniprogram/dist/internal";
+
+import Toast from "@vant/weapp/toast/toast";
+import { store } from "../../../store/store";
 // packageA/pages/goods_detail/goods_detail.ts
 Page({
   /**
@@ -6,16 +10,27 @@ Page({
   data: {
     goods_info: {}, // 商品信息
     goods_param: [], // 商品参数
+    productBean: {}, // 商品product属性
+    product_id: "",
+    thead: [],
+    tbody: [],
+
     currentSwiper: 0,
     totalSwiper: 0,
     isMuted: true, // 初始静音
     isPlaying: true,
 
     sizeCards: [], // 尺码指南
-    default_spec_desc: [], // 默认尺码
+    default_spes_desc: [], // 默认尺码
     selectedSpecs: "",
     showfwsm: false, // 服务说明弹窗
     showyfx: false, // 运费险弹窗
+    Size: ["1"], // 尺码默认打开
+    gmxzNodes: "", // rich-text 内容 购买须知
+    loadingGmxz: false, // 加载中
+    loadFailGmxz: false, // 失败标记
+    showPurchasePop: false, // 购买-加入购物车-弹窗
+    isAddCart: false,
   },
 
   /**
@@ -42,16 +57,13 @@ Page({
       const album = Array.isArray(res.album) ? res.album : [];
       const video_url_raw = res.video_url;
       // 后端可能给 0 / false / 空串 (md这里给的就是空串)
-      const hasVideo =
-        typeof video_url_raw === "string" && video_url_raw.length > 5;
+      const hasVideo = typeof video_url_raw === "string" && video_url_raw.length > 5;
       const video_url = hasVideo ? video_url_raw : "";
 
       const totalSwiper = album.length + (hasVideo ? 1 : 0);
 
       const mediaList = hasVideo
-        ? [
-            { type: "video", url: video_url, cover: res.video_cover || "" },
-          ].concat(
+        ? [{ type: "video", url: video_url, cover: res.video_cover || "" }].concat(
             album.map((u) => ({
               type: "img",
               url: u,
@@ -82,23 +94,15 @@ Page({
       }
 
       // ---- 其他字段兜底/归一化 ----
-      const isfav =
-        res.isfav === true ||
-        res.isfav === "true" ||
-        res.isfav === 1 ||
-        res.isfav === "1";
+      const isfav = res.isfav === true || res.isfav === "true" || res.isfav === 1 || res.isfav === "1";
 
-      const default_spec_desc =
-        (res.product && res.product.default_spec_desc) || [];
-      const product_id =
-        (res.product && res.product.id) || res.product_id || res.id || "";
+      const default_spes_desc = (res.product && res.product.default_spes_desc) || [];
+      const product_id = (res.product && res.product.id) || res.product_id || res.id || "";
 
       const show_type = Number(res.show_type) || 0;
       const isPoints = show_type === 2 || show_type === 4;
 
-      const recImgs = Array.isArray(res.pairRecommendations)
-        ? res.pairRecommendations
-        : [];
+      const recImgs = Array.isArray(res.pairRecommendations) ? res.pairRecommendations : [];
 
       this.setData(
         {
@@ -107,7 +111,7 @@ Page({
           product_id,
           buyBtnText: isPoints ? "立即兑换" : "立即购买",
           showCartBtn: !isPoints,
-          default_spec_desc,
+          default_spes_desc,
           totalSwiper,
           sizeCards,
           show_type,
@@ -115,7 +119,7 @@ Page({
           recImgs,
         },
         () => {
-          // this.initDefaultSelected()
+          this.initDefaultSelected();
           //  setTimeout(() => this.setData({ showTipBox: true }), 5000)
         }
       );
@@ -139,10 +143,11 @@ Page({
   // 初始化默认选中的规格
   initDefaultSelected() {
     const defaultSpecs = {};
-    if (!this.data.default_spec_desc) {
+    if (!this.data.default_spes_desc) {
       return;
     }
-    this.data.default_spec_desc.forEach((category) => {
+
+    this.data.default_spes_desc.forEach((category) => {
       const defaultItem = category.fenlei.find((item) => item.is_default);
       if (defaultItem) {
         defaultSpecs[category.items] = defaultItem.name;
@@ -241,11 +246,91 @@ Page({
   onCloseYfx() {
     this.setData({ showyfx: false });
   },
+  onShowPurchasePop() {
+    this.setData({ showPurchasePop: true });
+  },
+  onClosePurchasePop() {
+    this.setData({ showPurchasePop: false });
+  },
   // 打开运费险介绍
   openFreightInsuranceIntro() {
     wx.navigateTo({
       url: `/pages/richText/richText?id=14`,
     });
+  },
+  // 尺码指南
+  onChangeSize(event) {
+    this.setData({
+      Size: event.detail,
+    });
+  },
+  // 质检报告
+  onChangeQuality(event) {
+    this.setData({
+      Quality: event.detail,
+    });
+  },
+  // 原创声明
+  onChangeCopyright(event) {
+    this.setData({
+      Copyright: event.detail,
+    });
+  },
+  // 购买须知
+  onChangePurchaseNotice(event) {
+    // 第一次展开且还没加载过
+    if (!this.data.gmxzNodes && !this.data.loadingGmxz) {
+      this.fetchGmxz();
+    }
+    this.setData({
+      purchaseNotice: event.detail,
+    });
+  },
+  // 获取购买须知html
+  async fetchGmxz() {
+    try {
+      this.setData({ loadingGmxz: true, loadFailGmxz: false });
+
+      const app = getApp<IAppOption>();
+      const res = await app.$http.get("https://zhenda.wdzhengda.com/111gmxz.html");
+
+      // console.log(res);
+      // 直接把 html 字符串塞给 <rich-text>
+      this.setData({
+        gmxzNodes: res || "",
+        loadingGmxz: false,
+      });
+    } catch (e) {
+      this.setData({
+        loadingGmxz: false,
+        loadFailGmxz: true,
+      });
+      console.error("购买须知载失败", e);
+    }
+  },
+  onClickKF() {
+    Toast("点击了客服");
+    // Toast.success("成功文案");
+    // Toast.fail("失败文案");
+    // Toast.loading({
+    //   message: "加载中...",
+    //   forbidClick: true, // 背景不可点击
+    // });
+  },
+  onClickCart() {
+    // 上面先引入store
+    store.updateActiveTabBarIndex(3); // 先把全局 active 改了
+    wx.switchTab({
+      url: "/pages/cart/cart",
+    });
+    Toast("点击了购物车");
+  },
+  onClickShop() {
+    Toast("点击了店铺");
+  },
+  openDialog(e) {
+    const type = e.currentTarget.dataset.type;
+    this.setData({ isAddCart: type == "addCart", showPurchasePop: true });
   },
   /**
    * 生命周期函数--监听页面隐藏
