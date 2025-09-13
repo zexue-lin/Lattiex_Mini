@@ -1,28 +1,145 @@
 <!--pages/home/home.wxml-->
-<navigation-bar title="首页" back="{{ false }}" background="#ffffff" color="#000000" />
+<view class="home-container" style="padding-bottom: {{safeBottom}}px;">
 
-<swiper indicator-dots="{{true}}" autoplay="{{true}}" interval="{{3000}}" duration="{{500}}" circular="true">
-  <block wx:for="{{pointsBannerList}}" wx:key="index">
-    <swiper-item>
-      <navigator class="swpier-item" url="/packageA/pages/goods_detail/goods_detail?goods_id={{item.banner_value}}">
-        <image class="swiper-image" src="{{item.banner_img_src}}" />
-      </navigator>
-    </swiper-item>
-  </block>
-</swiper>
-<van-toast id="van-toast" />
+	<navigation-bar title="首页" back="{{ false }}" background="#ffffff" color="#000000" />
 
-<scroll-view class="category-list" scroll-x="true" scroll-with-animation="true">
-  <block wx:for="{{categoryList}}" wx:key="id">
-    <view class="category-item" wx:for="{{item.child}}" wx:key="id" wx:for-item="child" bindtap="handlerCate" data-id="{{child.id}}">
-      <image class="cate-img" src="{{child.image_url}}" mode="aspectFill" />
-      <view class="cate-content">
-        <text class="cate-title">{{child.name}}</text>
-        <view class="cate-more">
-          <text class="more-text">VIEW MORE</text>
-          <image class="more-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-homeviewmore.png" mode="aspectFit" />
-        </view>
-      </view>
-    </view>
-  </block>
-</scroll-view>
+	<!-- 顶部轮播 -->
+	<swiper indicator-dots="{{true}}" autoplay="{{false}}" interval="{{3000}}" duration="{{500}}" circular="true">
+		<block wx:for="{{pointsBannerList}}" wx:key="index">
+			<swiper-item>
+				<navigator class="swpier-item" url="/packageA/pages/goods_detail/goods_detail?goods_id={{item.banner_value}}">
+					<image class="swiper-image" src="{{item.banner_img_src}}" />
+				</navigator>
+			</swiper-item>
+		</block>
+	</swiper>
+	<van-toast id="van-toast" />
+
+	<!-- 分类滚动 -->
+	<scroll-view class="category-list" scroll-x="true" scroll-with-animation="true">
+		<block wx:for="{{categoryList}}" wx:key="id">
+			<view class="category-item" wx:for="{{item.child}}" wx:key="id" wx:for-item="child" bindtap="handlerCate" data-id="{{child.id}}">
+				<image class="cate-img" src="{{child.image_url}}" mode="aspectFill" />
+				<view class="cate-content">
+					<text class="cate-title">{{child.name}}</text>
+					<view class="cate-more">
+						<text class="more-text">VIEW MORE</text>
+						<image class="more-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-homeviewmore.png" mode="aspectFit" />
+					</view>
+				</view>
+			</view>
+		</block>
+	</scroll-view>
+
+	<!-- 分割title -->
+	<view class="middleTitle">
+		<text class="title-pla" selectable="false"> {{ title2_en }} </text>
+		<view class="title-box">
+			<!--            <view class="dot">·</view>-->
+			<text class="title-text" selectable="false"> {{ title2 }} </text>
+			<!--            <view class="dot">·</view>-->
+		</view>
+
+	</view>
+
+	<!-- 新季穿搭 -->
+	<block wx:if="{{newSwiperAlive}}">
+		<view class="dressview">
+			<swiper class="carousel" wx:if="{{newSeasonList.length}}" autoplay="{{false}}" interval="3000" duration="1000" circular="{{true}}" current="{{currentControlled}}" previous-margin="120px" next-margin="120px" bindchange="onSeasonChange" bindanimationfinish="onSeasonFinish">
+
+				<block wx:for="{{newSeasonList}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+					<swiper-item class="new-season-item" bindtap="gotoGoodsDetail" data-id="{{ item.id }}">
+						<image class="carousel-image {{ uiIndex == index ? 'active' : 'quiet' }}" src="{{ item.image_url }}" mode="heightFix" />
+						<view class="model-name {{ uiIndex == index ? 'active' : 'quiet' }}">{{item.name}}</view>
+						<view class="model-price {{ uiIndex == index ? 'active' : 'quiet' }}">￥{{item.price}}</view>
+					</swiper-item>
+				</block>
+			</swiper>
+
+			<!-- 自定义指示点：跟随 uiIndex 即可 -->
+			<view class="dots1">
+				<block wx:for="{{newSeasonList}}" wx:key="index" wx:for-index="index">
+					<view class="{{ uiIndex == index ? 'active' : '' }}"></view>
+				</block>
+			</view>
+		</view>
+	</block>
+
+	<!-- H5 入口容器 -->
+	<view wx:if="{{is_show_settledIn == 1}}" class="designer-entry" bindtap="goToH5">
+		<image class="entry-bg" src="https://zhenda.wdzhengda.com/uploads/home/bn-entry.png" mode="widthFix" />
+
+		<view class="entry-content">
+			<view class="entry-title">小众原创设计师进驻</view>
+			<view class="entry-action">
+				<text class="entry-text">立即申请</text>
+				<image class="entry-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic_next.png" />
+			</view>
+		</view>
+	</view>
+
+	<!-- 分割title -->
+	<view class="middleTitle">
+		<text class="title-pla" selectable="false"> {{ title3_en }} </text>
+		<view class="title-box">
+			<!--            <view class="dot">·</view>-->
+			<text class="title-text" selectable="false"> {{ title3 }} </text>
+			<!--            <view class="dot">·</view>-->
+		</view>
+	</view>
+
+	<!-- 积分专区 -->
+	<view class="points-section-first">
+		<!--        &lt;!&ndash; 上半部分 &ndash;&gt;-->
+
+		<view class="card">
+			<!-- 左侧 -->
+			<view class="left">
+				<!-- 未登录：保持你现有的展示 -->
+				<block wx:if="{{!isLoggedIn}}">
+					<text class="big-num">10</text>
+				</block>
+
+				<!-- 已登录：显示图片 + 【奖励积分】xx -->
+				<block wx:else>
+					<image class="reward-img" src="{{points_banner_list[0].banner_img_src}}" mode="aspectFill" wx:if="{{points_banner_list && points_banner_list[0].banner_img_src}}" />
+					<view class="reward-text" wx:if="{{points_banner_list}}">
+						奖励积分+{{points_banner_list[0].price}}
+					</view>
+					<!-- 兜底：如果拿不到数据 -->
+					<view class="reward-text" wx:if="{{!points_banner_list}}">
+						奖励积分
+					</view>
+				</block>
+			</view>
+
+			<!-- 中间：未登录显示原文案；已登录可隐藏（按你的描述） -->
+			<view class="middle" wx:if="{{!isLoggedIn}}">
+				<text class="desc">新用户注册额外获得积分</text>
+			</view>
+
+			<!-- 右侧按钮：文案随登录态切换 -->
+			<view class="right">
+				<view class="btn" bindtap="onPrimaryBtnTap">
+					{{ isLoggedIn ? '消费购买' : '获得积分' }}
+				</view>
+			</view>
+		</view>
+
+
+		<!-- &lt;!&ndash; 下半部分 &ndash;&gt; -->
+		<view class="card 16pro">
+			<view class="left">
+				<text class="desc1">积分兑换 </text>
+
+				<text class="bold-num">{{ title2_1}}</text>
+			</view>
+			<view class="right">
+				<view class="btn" bindtap="goPointsMall">积分商场</view>
+			</view>
+		</view>
+		<!--    以上是之前的积分专区，两个长条而已，下面改成和阿玛尼微信小程序一样的效果    -->
+	</view>
+
+
+</view>

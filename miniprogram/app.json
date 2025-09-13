@@ -1,76 +1,76 @@
 {
-  "pages": [
-    "pages/home/home",
-    "pages/video/video",
-    "pages/points_mall/points_mall",
-    "pages/cart/cart",
-    "pages/my/my",
-    "pages/cate/cate",
-    "pages/index/index",
-    "pages/logs/logs"
-  ],
-  "subPackages": [
-    {
-      "root": "packageA",
-      "pages": [
-        "pages/goods_detail/goods_detail",
-        "pages/goods_list/goods_list",
-        "pages/search/search"
-      ]
-    }
-  ],
-  "window": {
-    "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
-  },
-  "rendererOptions": {
-    "skyline": {
-      "defaultDisplayBlock": true,
-      "disableABTest": true,
-      "sdkVersionBegin": "3.0.0",
-      "sdkVersionEnd": "15.255.255"
-    }
-  },
-  "componentFramework": "glass-easel",
-  "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents",
-  "tabBar": {
-    "custom": true,
-    "color": "#7A7E83",
-    "selectedColor": "#000000",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
-    "list": [
-      {
-        "pagePath": "pages/home/home",
-        "text": "首页",
-        "iconPath": "static/tabBar/ic_main1.png",
-        "selectedIconPath": "static/tabBar/ic_main1_s.png"
-      },
-      {
-        "pagePath": "pages/video/video",
-        "text": "视频",
-        "iconPath": "static/tabBar/ic_main2.png",
-        "selectedIconPath": "static/tabBar/ic_main2_s.png"
-      },
-      {
-        "pagePath": "pages/points_mall/points_mall",
-        "text": "积分商城",
-        "iconPath": "static/tabBar/ic_main3.png",
-        "selectedIconPath": "static/tabBar/ic_main3_s.png"
-      },
-      {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车",
-        "iconPath": "static/tabBar/ic_main4.png",
-        "selectedIconPath": "static/tabBar/ic_main4_s.png"
-      },
-      {
-        "pagePath": "pages/my/my",
-        "text": "我的",
-        "iconPath": "static/tabBar/ic_main5.png",
-        "selectedIconPath": "static/tabBar/ic_main5_s.png"
-      }
-    ]
-  }
+	"pages": [
+		"pages/home/home",
+		"pages/video/video",
+		"pages/points_mall/points_mall",
+		"pages/cart/cart",
+		"pages/my/my",
+		"pages/cate/cate",
+		"pages/index/index",
+		"pages/logs/logs"
+	],
+	"subPackages": [
+		{
+			"root": "packageA",
+			"pages": [
+				"pages/goods_detail/goods_detail",
+				"pages/goods_list/goods_list",
+				"pages/search/search"
+			]
+		}
+	],
+	"window": {
+		"navigationBarTextStyle": "black",
+		"navigationStyle": "custom"
+	},
+	"rendererOptions": {
+		"skyline": {
+			"defaultDisplayBlock": true,
+			"disableABTest": true,
+			"sdkVersionBegin": "3.0.0",
+			"sdkVersionEnd": "15.255.255"
+		}
+	},
+	"componentFramework": "glass-easel",
+	"sitemapLocation": "sitemap.json",
+	"lazyCodeLoading": "requiredComponents",
+	"tabBar": {
+		"custom": true,
+		"color": "#7A7E83",
+		"selectedColor": "#000000",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"text": "首页",
+				"iconPath": "static/tabBar/ic_main1.png",
+				"selectedIconPath": "static/tabBar/ic_main1_s.png"
+			},
+			{
+				"pagePath": "pages/video/video",
+				"text": "视频",
+				"iconPath": "static/tabBar/ic_main2.png",
+				"selectedIconPath": "static/tabBar/ic_main2_s.png"
+			},
+			{
+				"pagePath": "pages/points_mall/points_mall",
+				"text": "积分商城",
+				"iconPath": "static/tabBar/ic_main3.png",
+				"selectedIconPath": "static/tabBar/ic_main3_s.png"
+			},
+			{
+				"pagePath": "pages/cart/cart",
+				"text": "购物车",
+				"iconPath": "static/tabBar/ic_main4.png",
+				"selectedIconPath": "static/tabBar/ic_main4_s.png"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"text": "我的",
+				"iconPath": "static/tabBar/ic_main5.png",
+				"selectedIconPath": "static/tabBar/ic_main5_s.png"
+			}
+		]
+	}
 }

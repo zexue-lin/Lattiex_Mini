@@ -3,3 +3,5 @@
 <view>{{numA}} + {{numB}} = {{cartNum}}</view>
 <van-button type="primary" bindtap="btnHandler1" data-step="{{1}}">cartNum+1</van-button>
 <van-button type="danger" bindtap="btnHandler1" data-step="{{-1}}">cartNum-1</van-button>
+
+<!-- 购物车的角标 可以根据当前用户的购物车数量查询，也可以直接查询购物车列表的数量count吧 其实都差不多 -->

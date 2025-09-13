@@ -13,6 +13,7 @@ Component({
     fields: {
       sum: "cartNum",
       active: "activeTabBarIndex", // 将store里定义的映射到组件里面使用
+      safeBottom: "safeBottom",
     },
     actions: {
       updataActive: "updateActiveTabBarIndex",
@@ -27,6 +28,16 @@ Component({
       this.setData({
         "list[3].info": val,
       });
+    },
+  },
+  lifetimes: {
+    attached() {
+      const sys = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
+      const safeBottom = sys.safeArea ? Math.max(0, sys.screenHeight - sys.safeArea.bottom) : 0;
+      // ✅ 只存一次（避免重复写 store）：如果未设置或有变化再写入
+      if (store.safeBottom !== safeBottom) {
+        store.updateSafeBottom(safeBottom);
+      }
     },
   },
   /**
