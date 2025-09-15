@@ -141,5 +141,35 @@
 		<!--    以上是之前的积分专区，两个长条而已，下面改成和阿玛尼微信小程序一样的效果    -->
 	</view>
 
+	<!-- 分割title -->
+	<view class="middleTitle">
+		<text class="title-pla" selectable="false"> {{ title4_en }} </text>
+		<view class="title-box">
+			<!--            <view class="dot">·</view>-->
+			<text class="title-text" selectable="false"> {{ title4 }} </text>
+			<!--            <view class="dot">·</view>-->
+		</view>
+	</view>
+
+
+	<!-- 商品列表区域 -->
+	<view class="goods-list">
+		<view class="goods-item" wx:for="{{ goodsList }}" wx:key="id" bindtap="gotoGoodsDetail" data-id="{{ item.id }}" data-index="{{ index }}">
+			<image class="goods-img" src="{{ item.image_url }}" mode="aspectFill"></image>
+			<view class="goods-info">
+				<text class="goods-title">{{ item.name }}</text>
+				<text class="goods-price">¥{{ item.price }}</text>
+				<text class="goods-sold" wx:if="{{ showSalesVolume }}">已售{{ item.buy_count || 0 }}</text>
+			</view>
+		</view>
+		<!-- 加载中提示 -->
+		<view class="loading" wx:if="{{ isLoading }}">加载中...</view>
+		<!-- 没有更多数据 -->
+		<view class="no-more" wx:if="{{ !hasMore && goodsList.length > 0 }}">没有更多数据了...</view>
+		<!-- 空状态 -->
+	</view>
+	<view class="empty-state" wx:if="{{ !loading && goodsList.length === 0 }}">
+		<text>暂无商品数据</text>
+	</view>
 
 </view>

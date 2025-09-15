@@ -13,13 +13,14 @@ interface Category {
   sort: number;
   child: Category[];
 }
+type GetGoodsListOptions = { reset?: boolean };
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    pointsBannerList: [] as any[],
+    // pointsBannerList: [] as any[], 不用写了，在onload里面已经绑定了fields
     categoryList: [] as Category[],
     title1: "",
     title2: "",
@@ -34,6 +35,12 @@ Page({
     uiIndex: 0, // 只负责“放大”样式
     currentControlled: 0, // 只负责 newSwiper 的受控 current
     is_show_settledIn: 1, // 是否显示入住申请
+    goodsList: [] as any[], // 商品列表
+    page: 1, // 当前页码
+    pageSize: 10, // 每页数量
+    hasMore: true, // 是否还有更多数据
+    loading: false, // 加载状态
+    isLoggedIn: false, // 用户是否已登录
   },
 
   /**
@@ -44,10 +51,13 @@ Page({
       this.getCategoryList(),
       // 获取新季穿搭
       this.getNewSeasonList();
+    // 首次 / 重新进入页面
+    this.getGoodsList({ reset: true });
     // 直接从mobx里面拿到tabbar的高度
     this.storeBindings = createStoreBindings(this, {
       store,
-      fields: ["safeBottom"], // 直接拿来用
+      fields: ["safeBottom", "pointsBannerList"], // 直接拿来用
+      actions: ["setPointsBannerList"], // 若需要直接调用 action，也可以写在 actions
     });
   },
 
@@ -67,8 +77,10 @@ Page({
       const title2Arr = (res.tutor_activity_intro || "").split("&");
       const title3Arr = (res.topic_img || "").split("&");
       const title4Arr = (res.top_img || "").split("&");
+      // 把banner列表放进store
+      store.setPointsBannerList(res.points_banner_list || []);
       this.setData({
-        pointsBannerList: res.points_banner_list || [],
+        // pointsBannerList: res.points_banner_list || [],不需要 setData —— 已经由 store 绑定自动注入
         title1: res.tutor_activity_title,
         title2: title2Arr[0] || "",
         title2_en: title2Arr[1] || "",
@@ -101,6 +113,52 @@ Page({
     }
   },
 
+  /** 同一个方法：首次/刷新 + 加载更多 */
+  async getGoodsList(options: GetGoodsListOptions = {}) {
+    const { reset = false } = options;
+    // 1) 并发保护 & 是否还有更多（加载更多场景才判断 hasMore）
+    if (this.data.loading) return;
+    if (!reset && !this.data.hasMore) return;
+    try {
+      if (reset) {
+        // 2) 重置：回第一页并清空
+        this.setData({
+          page: 1,
+          goodsList: [],
+          hasMore: true,
+        });
+      }
+      this.setData({ loading: true });
+
+      const app = getApp<IAppOption>();
+      const { data: res } = await app.$http.post("", {
+        method: "goods.goodsList",
+        page: this.data.page,
+        pageSize: this.data.pageSize,
+      });
+
+      // 3) 按你现有写法：res 就是列表
+      const newList: any[] = Array.isArray(res) ? res : [];
+
+      // 4) 是否还有更多：本次返回条数 >= pageSize
+      const hasMore = newList.length >= this.data.pageSize;
+
+      // 5) 追加或替换
+      const merged = reset ? newList : this.data.goodsList.concat(newList);
+
+      this.setData({
+        goodsList: merged,
+        hasMore,
+        page: hasMore ? this.data.page + 1 : this.data.page, // 仅在还有更多时自增页码
+      });
+    } catch (e) {
+      console.error("获取商品失败", e);
+      wx.showToast({ title: "获取商品失败", icon: "none" });
+    } finally {
+      this.setData({ loading: false });
+    }
+  },
+
   // 与原生的相比，
   /**
    * success → try 里的逻辑
@@ -128,7 +186,7 @@ Page({
   },
 
   /**
-   * 事件点击----------------------------------
+   * ------------------------------- 事件点击 ----------------------------------
    */
 
   handlerCate(e) {
@@ -138,11 +196,42 @@ Page({
       url: "/pages/cate/cate",
     });
   },
+  gotoGoodsDetail(e) {
+    const { id } = e.currentTarget.dataset;
+    if (!id) return;
+    wx.navigateTo({
+      url: `/packageA/pages/goods_detail/goods_detail?id=${id}`,
+    });
+  },
+  onPrimaryBtnTap() {
+    if (!this.data.isLoggedIn) {
+      Toast.fail("去登录");
+      // 未登录 → 去登录页
+      wx.navigateTo({
+        url: "/pages/one-login/one-login",
+      });
+      return;
+    }
+    if (this.data.pointsBannerList) {
+      const goods_id = this.data.pointsBannerList[0].banner_value;
+      wx.navigateTo({
+        url: `/packageA/pages/good_detail/good_detail?id=${goods_id}`,
+      });
+    } else {
+      wx.showToast({
+        title: "未获取到商品ID",
+        icon: "none",
+      });
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {},
 
+  /**
+   * ------------------------------- 监控事件 ----------------------------------
+   */
   /**
    * 生命周期函数--监听页面显示
    */
@@ -151,6 +240,13 @@ Page({
     // const sys = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
     // const safeBottom = sys.safeArea ? Math.max(0, sys.screenHeight - sys.safeArea.bottom) : 0;
     // this.setData({ safeBottomTarbar: safeBottom });
+    const token = wx.getStorageSync("token");
+    if (token) {
+      Toast.success("已经登录");
+      this.setData({ isLoggedIn: true });
+    } else {
+      Toast.fail("未登陆");
+    }
   },
 
   // 新季穿搭的指示器
@@ -193,12 +289,17 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh() {},
+  onPullDownRefresh() {
+    // 下拉刷新：与首次一样，重置后加载
+    this.getGoodsList({ reset: true }).finally(() => wx.stopPullDownRefresh());
+  },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom() {},
+  onReachBottom() {
+    this.getGoodsList();
+  },
 
   /**
    * 用户点击右上角分享

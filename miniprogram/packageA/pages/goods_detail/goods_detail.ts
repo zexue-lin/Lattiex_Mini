@@ -37,7 +37,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const goods_id = options.goods_id;
+    const goods_id = options.goods_id || options.id;
 
     this.getGoodsDetail(goods_id).then(() => {
       this.getParamsData(goods_id);

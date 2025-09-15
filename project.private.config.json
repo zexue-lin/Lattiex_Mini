@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/cate/cate",
-          "pathName": "pages/cate/cate",
+          "name": "pages/points_mall/points_mall",
+          "pathName": "pages/points_mall/points_mall",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/cate/cate",
+          "pathName": "pages/cate/cate",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

@@ -1,2 +1,156 @@
 <!--pages/points_mall/points_mall.wxml-->
 <navigation-bar title="积分商城" back="{{ false }}" background="#ffffff" color="#000000" />
+
+<view class="mallcontainer">
+	<view class="currentPoint-section">
+		<!-- 内容区域 -->
+		<view class="point-wrapper">
+			<text class="point-value" bindtap="goPointsList">{{ userInfo.points ? userInfo.points : 0 }}</text>
+			<text class="point-text">你当前积分</text>
+		</view>
+
+		<!-- 中间横线+英文 -->
+		<view class="section-title">
+			<view class="line left-line"></view>
+			<text class="title-text">INTEGRAL TASK</text>
+			<view class="line right-line"></view>
+		</view>
+		<!-- 获取积分途径-->
+		<view class="four-section">
+			<view class="four-item" bindtap="goLogin">
+				<view class="four-top">
+					<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/pointsMall/activity1.png" mode="aspectFit" />
+				</view>
+				<view class="four-bottom">
+					<text class="item-text">注册登陆</text>
+				</view>
+			</view>
+			<view class="four-item" bindtap="gocategoryList">
+				<view class="four-top">
+					<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/pointsMall/activity2.png" mode="aspectFit" />
+				</view>
+				<view class="four-bottom">
+					<text class="item-text">购物消费</text>
+				</view>
+			</view>
+			<view class="four-item" bindtap="goInviteFriend">
+				<view class="four-top">
+					<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/pointsMall/activity4.png" mode="aspectFit" />
+				</view>
+				<view class="four-bottom">
+					<text class="item-text">邀请好友</text>
+				</view>
+			</view>
+			<view class="four-item" bindtap="goActivities">
+				<view class="four-top">
+					<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/pointsMall/activity2.png" mode="aspectFit" />
+				</view>
+				<view class="four-bottom">
+					<text class="item-text">参与活动</text>
+				</view>
+			</view>
+		</view>
+
+		<!-- 整体容器：左右箭头 + 中间 swiper -->
+		<view class="banner-container">
+			<!-- ◀ 左侧按钮 -->
+			<image class="nav-btn nav-left" src="https://zhenda.wdzhengda.com/uploads/pointsMall/pointsmallpre.png" mode="widthFix" bindtap="prevSlide" />
+
+			<!-- swiper：占满剩余宽度 -->
+			<swiper id="bannerSwiper" class="banner-swiper" circular="{{ true }}" current="{{ swiperCurrent }}" bindchange="onSwiperChange">
+				<swiper-item wx:for="{{ pointsBannerList }}" wx:key="id" wx:for-index="index">
+					<view class="banner-wrapper" bindtap="clickBanner" data-id="{{ index }}">
+						<!-- 图片 -->
+						<image class="banner-thumb" src="{{ item.banner_img_src }}" mode="aspectFill" />
+
+						<!-- 右侧文案 -->
+						<view class="banner-info">
+							<text class="banner-title">奖励积分+ {{item.price}}</text>
+							<view class="banner-sub">
+								<text>消费购买</text>
+								<image class="arrow-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic_next.png" mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</swiper-item>
+			</swiper>
+
+			<!-- ▶ 右侧按钮 -->
+			<image class="nav-btn nav-right" src="https://zhenda.wdzhengda.com/uploads/pointsMall/pointsmallnext.png" mode="widthFix" bindtap="nextSlide" />
+		</view>
+
+	</view>
+
+	<!-- 积分商城商品列表 - 瀑布交错结构，不分组，支持点击 -->
+	<view class="staggered-list">
+		<block wx:for="{{ groupedGoodsList }}" wx:key="index">
+			<view class="staggered-group">
+				<!-- 左列 -->
+				<view class="staggered-left">
+					<block wx:if="{{ item.leftBig }}">
+						<!-- 左：大图 -->
+						<view class="goods-item big" bindtap="gotoGoodsDetail" data-id="{{ item.items[0].id }}">
+							<view class="image-wrapper">
+								<image src="{{ item.items[0].image_url }}" mode="aspectFill"></image>
+								<view class="image-mask"></view>
+								<view class="info">
+									<text class="title">{{ item.items[0].name }}</text>
+									<text class="price">{{ item.items[0].price }} 积分</text>
+								</view>
+							</view>
+						</view>
+					</block>
+					<block wx:else>
+						<!-- 左：两个小图 -->
+						<block wx:for="{{ item.items }}" wx:for-index="idx" wx:for-item="child" wx:key="id" wx:if="{{ idx < 2 }}">
+							<view class="goods-item small" bindtap="gotoGoodsDetail" data-id="{{ child.id }}">
+								<image src="{{ child.image_url }}" mode="aspectFill"></image>
+								<view class="image-mask"></view>
+								<view class="info">
+									<text class="title">{{ child.name }}</text>
+									<text class="price">{{ child.price }} 积分</text>
+								</view>
+							</view>
+						</block>
+					</block>
+				</view>
+
+				<!-- 右列 -->
+				<view class="staggered-right">
+					<block wx:if="{{ !item.leftBig }}">
+						<!-- 右：大图 -->
+						<view class="goods-item big" wx:if="{{ item.items.length === 3 }}" bindtap="gotoGoodsDetail" data-id="{{ item.items[2].id }}">
+							<view class="image-wrapper">
+								<image src="{{ item.items[2].image_url }}" mode="aspectFill"></image>
+								<view class="image-mask"></view>
+								<view class="info">
+									<text class="title">{{ item.items[2].name }}</text>
+									<text class="price">{{ item.items[2].price }} 积分</text>
+								</view>
+							</view>
+						</view>
+					</block>
+					<block wx:else>
+						<!-- 右：两个小图 -->
+						<block wx:for="{{ item.items }}" wx:for-index="idx" wx:for-item="child" wx:key="id" wx:if="{{ idx > 0 }}">
+							<view class="goods-item small" bindtap="gotoGoodsDetail" data-id="{{ child.id }}">
+								<image src="{{ child.image_url }}" mode="aspectFill"></image>
+								<view class="image-mask"></view>
+								<view class="info">
+									<text class="title">{{ child.name }}</text>
+									<text class="price">{{ child.price }} 积分</text>
+								</view>
+							</view>
+						</block>
+					</block>
+				</view>
+			</view>
+		</block>
+	</view>
+
+	<!-- 空状态 -->
+	<view class="empty-state" wx:if="{{ !loading && goodsList.length === 0 }}">
+		<image src="/images/view_empty.png"></image>
+		<text>暂无商品数据</text>
+	</view>
+</view>

@@ -1,1 +1,240 @@
 /* pages/points_mall/points_mall.wxss */
+.mallcontainer {
+  padding: 0 20rpx;
+  /* 顶部大容器 */
+  .currentPoint-section {
+    position: relative;
+    padding: 20rpx;
+    overflow: hidden;
+    border: #8b8b8b 1rpx solid;
+    /* 上面积分区域 */
+    .point-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .point-value {
+        font-size: 68rpx;
+        /* font-weight: bold; */
+        color: #000;
+        font-family: "AlibabaPuHuiTi-45";
+      }
+
+      .point-text {
+        font-family: "AlibabaPuHuiTi-45";
+        font-size: 20rpx;
+        color: #767676;
+      }
+    }
+    .section-title {
+      margin-top: 30rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0 50rpx;
+      box-sizing: border-box;
+      .title-text {
+        font-family: "AlibabaPuHuiTi-45";
+        font-size: 40rpx;
+        color: #131313;
+        letter-spacing: 6rpx;
+        margin: 0 30rpx;
+      }
+
+      /* 左右横线渐变 */
+      .line {
+        height: 2rpx;
+        flex: 1;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
+      }
+
+      .left-line {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
+      }
+
+      .right-line {
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
+      }
+    }
+    /* 四个部份 */
+    .four-section {
+      box-sizing: border-box;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap; /* 允许换行 */
+      justify-content: space-around;
+      .four-item {
+        width: calc((100% - 20rpx) / 4);
+        height: 150rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 20rpx;
+        box-sizing: border-box;
+        .four-top,
+        .four-bottom {
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          .item-icon {
+            width: 50rpx;
+            height: 50rpx;
+          }
+          .item-text {
+            font-size: 20rpx;
+            color: #131313;
+          }
+        }
+      }
+    }
+    /* 整体容器：横向排列、左右箭头固定宽度，中间 swiper 占满其余空间 */
+    .banner-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 160rpx; /* 图片 120rpx + 上下 20rpx 内边距 */
+      box-sizing: border-box;
+      /* 左右按钮 */
+      .nav-btn {
+        width: 11rpx;
+        height: 19rpx;
+      }
+
+      .nav-left {
+        margin-left: 24rpx;
+      }
+
+      .nav-right {
+        margin-right: 24rpx;
+      }
+      /* swiper 占剩余空间并充满父容器高度 */
+      .banner-swiper {
+        flex: 1;
+        height: 100%;
+        .banner-wrapper {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center; /* 让图片+文字整体水平居中 */
+          /* 缩略图 */
+          .banner-thumb {
+            width: 120rpx;
+            height: 120rpx;
+            flex: 0 0 120rpx;
+            margin-right: 100rpx; /* 图片与文字区域的间距 */
+          }
+
+          /* 右侧信息区域 */
+          .banner-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .banner-title {
+              font-family: "AlibabaPuHuiTi-45";
+              font-size: 22rpx;
+              color: #131313;
+              font-weight: 500;
+            }
+
+            .banner-sub {
+              font-family: "AlibabaPuHuiTi-45";
+              margin-top: 10rpx;
+              display: flex;
+              align-items: center;
+              font-size: 22rpx;
+              color: #666;
+            }
+
+            .arrow-icon {
+              width: 24rpx;
+              height: 24rpx;
+              margin-left: 8rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+  /* 瀑布流商品部分 */
+  .staggered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+    margin-top: 30rpx;
+    padding-bottom: 200rpx; // 避免被 tabBar 遮住
+    .staggered-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 20rpx;
+      .staggered-left,
+      .staggered-right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 20rpx;
+        .goods-item {
+          position: relative;
+          overflow: hidden;
+
+          .image-mask {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(19, 19, 19, 0.3);
+            z-index: 1;
+          }
+
+          .info {
+            position: absolute;
+            left: 16rpx;
+            bottom: 16rpx;
+            z-index: 2;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            .title {
+              font-size: 22rpx;
+              line-height: 32rpx;
+              width: 90%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .price {
+              font-size: 20rpx;
+              color: #fff;
+              margin-top: 4rpx;
+            }
+          }
+
+          // 统一的图片基础样式
+          image {
+            width: 100%;
+            display: block;
+          }
+
+          // 大图/小图的高度
+          &.big {
+            image {
+              height: 500rpx;
+            }
+          }
+          &.small {
+            image {
+              height: 240rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+}
