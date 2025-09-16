@@ -37,7 +37,7 @@ Page({
     this.setData({ isLoading: true });
     try {
       const app = getApp<IAppOption>();
-      const { data: res } = await app.$http?.post("", {
+      const { data: res } = await app.$http.post("", {
         method: "goods.goodsList",
         page: this.data.page,
         pageSize: this.data.pageSize,

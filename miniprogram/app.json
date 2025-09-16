@@ -15,7 +15,8 @@
 			"pages": [
 				"pages/goods_detail/goods_detail",
 				"pages/goods_list/goods_list",
-				"pages/search/search"
+				"pages/search/search",
+				"pages/one_login/one_login"
 			]
 		}
 	],

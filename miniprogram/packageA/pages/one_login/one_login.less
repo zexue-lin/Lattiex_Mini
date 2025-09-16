@@ -1,0 +1,153 @@
+/* packageA/pages/one_login/one_login.wxss */
+.container1 {
+  padding: 0 40rpx;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  /* 头部容器：水平排列 + 两端对齐 */
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50rpx;
+    margin-top: 20rpx;
+    padding: 0 40rpx 0 20rpx;
+    /* 想再靠里就调大，如 60rpx */
+    box-sizing: border-box;
+
+    /* 返回按钮样式 */
+    .back-btn {
+      width: 40rpx;
+      /* 按钮宽度 */
+      height: 40rpx;
+      /* 按钮高度 */
+      image {
+        width: 100%;
+        /* 图片宽度填满容器 */
+        height: 100%;
+        /* 图片高度填满容器 */
+        object-fit: contain;
+        /* 保持图片比例，避免变形 */
+      }
+    }
+    .logotext-img {
+      width: 100rpx;
+      height: 30rpx;
+    }
+  }
+
+  /* 中间动态模特图 */
+  .login-background {
+    position: relative;
+    width: 80%;
+    height: 405px;
+    overflow: hidden;
+    margin-top: 30rpx;
+    /* 三张图堆叠 */
+    .transmodel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 1s ease-in-out;
+    }
+    /* slogan 居中在容器中央 */
+    .slogan {
+      position: absolute;
+      width: 252rpx;
+      height: 86rpx;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+  }
+
+  /* 登录按钮 */
+  .phone-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20rpx;
+    /* 按钮之间的间距 */
+    width: 80%;
+    margin-top: 40rpx;
+    position: relative;
+
+    .phone {
+      font-family: "Hanchansans-Light";
+      font-size: 32rpx;
+      color: #131313;
+    }
+    /* 通用按钮样式 */
+    .login-btn,
+    .other-btn {
+      font-family: "AlibabaPuHuiTi-45";
+      font-size: 32rpx;
+      width: 100%;
+      border-radius: 0;
+      border: none;
+    }
+    /* 黑色登录按钮 */
+    .login-btn {
+      background-color: #131313;
+      color: #fff;
+    }
+    /* 灰色其他账号按钮 */
+    .other-btn {
+      background-color: #f0f0f0;
+      color: #131313;
+    }
+    .sheet {
+      width: 100%;
+      background: #fff;
+      border-radius: 16rpx 16rpx 0 0;
+      padding: 32rpx;
+      .sheet-title {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20rpx;
+      }
+      .sheet-body {
+        font-family: "AlibabaPuHuiTi-45";
+        color: #666;
+        font-size: 24rpx;
+        line-height: 1.6;
+      }
+      .agree-btn {
+        font-family: "AlibabaPuHuiTi-45";
+        margin-top: 24rpx;
+        background: #131313;
+        color: #fff;
+        border-radius: 0;
+      }
+      .sheet-close {
+        font-family: "AlibabaPuHuiTi-45";
+        text-align: center;
+        color: #999;
+        padding: 20rpx 0;
+      }
+    }
+    /* 去注册 */
+    .invite-action {
+      display: flex;
+      align-items: center;
+      margin-top: 10rpx;
+      .invite-button-text {
+        font-family: "AlibabaPuHuiTi-55";
+        font-size: 26rpx;
+        color: #131313;
+      }
+
+      .next-icon {
+        width: 34rpx;
+        height: 24rpx;
+        margin-left: 10rpx;
+      }
+    }
+  }
+}

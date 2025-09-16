@@ -1,2 +1,149 @@
 <!--pages/my/my.wxml-->
 <navigation-bar title="我的" back="{{ false }}" background="#ffffff" color="#000000" />
+<view class="mine-container">
+	<!-- 设置和客服图标（右上角） -->
+	<view class="top-icons">
+		<navigator bindtap="handleGoMessage">
+			<image class="icon" src="https://zhenda.wdzhengda.com/uploads/mine/mine_kefu.png"></image>
+			<!-- 替换为实际设置图标路径 -->
+		</navigator>
+		<navigator bindtap="gotoSetting">
+			<image class="icon" src="https://zhenda.wdzhengda.com/uploads/mine/mine_setting.png"></image>
+			<!-- 替换为实际客服图标路径 -->
+		</navigator>
+		<!-- <view class="bottom-left-btn"></view> -->
+	</view>
+	<!-- 顶部登录区域 -->
+	<view class="profile-header">
+		<view class="user-info">
+			<!-- 头像 -->
+			<image class="avatar" src="{{ userInfo.avatar || 'https://cdn.wdzhengda.com/static/uploads/images/2025/08/16/175531668568a001cdd9c3c.png' }}" bindtap="goToLogin"></image>
+			<view class="user-item">
+				<!-- 用户名 -->
+				<text class="user-name" bindtap="goToLogin">{{ userInfo.nickname || '点击登录' }}</text>
+				<!-- 邀请码 + 图标 -->
+				<view class="invite-box" hidden="{{ !isLoggedIn }}">
+					<view hidden="{{ userInfo.is_promoter != 1 }}">
+						<image class="promoter-icon" src="https://zhenda.wdzhengda.com/uploads/mine/promoter.png" mode="aspectFit" bindtap="handleInviteCode" />
+					</view>
+
+					<text class="invite-code">邀请码：{{ userInfo.invitecode }}</text>
+					<image class="invite-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-copyinvite.png" mode="aspectFit" bindtap="handleInviteCode" />
+				</view>
+			</view>
+		</view>
+
+		<!-- 成为达人入口 -->
+		<view class="isVip" hidden="{{ userInfo.is_promoter == 1 || !isLoggedIn }}" bindtap="goToBecomeVip">
+			<text class="is-vip-text">申请达人</text>
+		</view>
+	</view>
+	<!-- 点赞收藏粉丝信息统计区域 -->
+	<view class="info-stats">
+		<view class="stat-item" style="{{ infoList.length >= 4 ? 'width: 25%;' : 'width: 33%;' }}" wx:for="{{ infoList }}" wx:key="index" wx:for-item="item" bindtap="gotoInfoStats" data-index="{{ index }}">
+			<text class="stat-value">{{ item.number }}</text>
+			<text class="stat-label">{{ item.label }}</text>
+		</view>
+	</view>
+	<!-- 钱包区域（背景图 + 内容叠加）-->
+	<view class="wallet-section">
+		<image class="wallet-bg" src="https://zhenda.wdzhengda.com/uploads/mine/walletBacImg.png" mode="aspectFill" />
+		<view class="wallet-content">
+			<view class="wallet-left">
+				<view wx:if="{{ isLoggedIn }}" bindtap="handleWithdraw">
+					<text class="wallet-action">点击提现</text>
+				</view>
+				<view wx:else>
+					<text class="wallet-action">登录查看</text>
+				</view>
+			</view>
+
+			<view class="wallet-right" bindtap="goToWallet">
+				<text class="wallet-label">钱包余额</text>
+				<text class="wallet-balance">{{ userInfo.balance || '0.00' }}</text>
+			</view>
+		</view>
+	</view>
+	<view class="wallet-section1" wx:if="{{ userInfo.is_promoter == 1 }}">
+		<view class="wallet-content">
+			<view class="wallet-left1" bindtap="goToWaitMoney" data-type="预收入">
+				<text class="wallet-balance1">{{ userInfo.advance_income || '0.00' }}</text>
+				<text class="wallet-action">预收入</text>
+			</view>
+			<view class="wallet-right1" bindtap="goToWaitMoney" data-type="累计收入">
+				<text class="wallet-balance1">{{ userInfo.accumulated_income || '0.00' }}</text>
+				<text class="wallet-label1">累积收入</text>
+			</view>
+		</view>
+	</view>
+	<!-- 地址 订单 优惠券 尺码 -->
+	<view class="four-section">
+		<view class="four-item" bindtap="goToAddress">
+			<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-address.png" mode="aspectFit" />
+			<text class="item-text">地址管理</text>
+		</view>
+		<view class="four-item" bindtap="goToOrderPage" data-type="0">
+			<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-oder.png" mode="aspectFit" />
+			<text class="item-text">我的订单</text>
+		</view>
+		<view class="four-item">
+			<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-coupon.png" mode="aspectFit" />
+			<text class="item-text">优惠券</text>
+		</view>
+		<view class="four-item" bindtap="goToRoleInfo">
+			<image class="item-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-ruler.png" mode="aspectFit" />
+			<text class="item-text">我的尺码</text>
+		</view>
+	</view>
+	<!-- 系统消息条 -->
+	<view class="information-section" bindtap="goToSysMsg">
+		<!-- 左侧：图标 + 文字 -->
+		<view class="information-left">
+			<image class="info-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic-information-sys.png" mode="widthFix" />
+			<text class="info-title">系统消息</text>
+		</view>
+
+		<!-- 右侧：未读数量 + 箭头 -->
+		<view class="information-right">
+			<text class="unread-text">暂无未读信息</text>
+			<image class="arrow-icon" src="https://zhenda.wdzhengda.com/uploads/pointsMall/pointsmallnext.png" mode="widthFix" />
+		</view>
+	</view>
+
+	<!-- 邀请好友部份 -->
+	<view class="invite-section" bindtap="goToInviteFriends">
+		<image class="inviteFriend" src="{{ my_invite_friend }}" mode="scaleToFill" />
+		<view class="invite-content">
+			<text class="invite-title">邀请好友获积分</text>
+			<view class="invite-action">
+				<text class="invite-button-text">马上邀请</text>
+				<image class="next-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic_next.png" mode="aspectFit" />
+			</view>
+		</view>
+	</view>
+
+	<view class="recom-text">
+		专属推荐
+	</view>
+	<!-- 商品列表区域 -->
+	<view class="goods-list">
+		<view class="goods-item" wx:for="{{ goodsList }}" wx:key="id" bindtap="goToGoodsDetail" data-id="{{ item.id }}" data-index="{{ index }}">
+			<image class="goods-img" src="{{ item.image_url }}" mode="aspectFill"></image>
+			<view class="goods-info">
+				<text class="goods-title">{{ item.name }}</text>
+				<text class="goods-price">¥{{ item.price }}</text>
+				<text class="goods-sold" wx:if="{{ showSalesVolume }}">已售{{ item.buy_count || 0 }}</text>
+			</view>
+		</view>
+		<!-- 加载中提示 -->
+		<view class="loading" wx:if="{{ isLoading }}">加载中...</view>
+		<!-- 没有更多数据 -->
+		<view class="no-more" wx:if="{{ !hasMore && goodsList.length > 0 }}">没有更多数据了...</view>
+		<!-- 空状态 -->
+	</view>
+
+	<view class="empty-state" wx:if="{{ !loading && goodsList.length === 0 }}">
+		<text>暂无商品数据</text>
+	</view>
+
+</view>

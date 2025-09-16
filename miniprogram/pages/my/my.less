@@ -1,1 +1,392 @@
 /* pages/my/my.wxss */
+.mine-container {
+  background-color: #fff;
+  min-height: 100vh;
+  padding: 0 20rpx 0 20rpx;
+  .top-icons {
+    width: 100%;
+    top: 0rpx;
+    background-color: #fff;
+    padding: 10rpx 20rpx 10rpx;
+    display: flex;
+    gap: 20rpx;
+    .bottom-left-btn {
+      flex: 1;
+    }
+    .icon {
+      width: 35rpx;
+      height: 35rpx;
+    }
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    .user-info {
+      display: flex;
+      align-items: center;
+      padding: 10rpx;
+      background-color: #fff;
+      .avatar {
+        width: 120rpx;
+        height: 120rpx;
+        border-radius: 50%;
+        margin-right: 20rpx;
+      }
+
+      .user-item {
+        display: flex;
+        flex-direction: column; /* 让名称和邀请码垂直排列 */
+        justify-content: flex-start; /* 水平方向左对齐，其实默认就是，但明确写出来更清晰 */
+        .user-name {
+          font-size: 32rpx;
+          /* font-weight: bold; */
+          color: #333;
+        }
+
+        .invite-box {
+          display: flex;
+          align-items: center;
+          margin-top: 10rpx;
+          .invite-code {
+            font-size: 22rpx;
+            color: #333;
+          }
+
+          .invite-icon {
+            width: 20rpx;
+            height: 20rpx;
+            margin-left: 10rpx;
+          }
+
+          .promoter-icon {
+            width: 120rpx;
+            height: 30rpx;
+          }
+        }
+      }
+    }
+    .isVip {
+      display: flex;
+      align-items: center;
+      background-color: #000;
+      padding: 15rpx 28rpx 15rpx 28rpx;
+      margin-left: auto; /* 使成为达人区域靠最右侧 */
+
+      .is-vip-text {
+        font-size: 20rpx;
+        color: #fff;
+      }
+    }
+  }
+  .info-stats {
+    display: flex;
+    flex-wrap: wrap; /* 开启换行，实现多行排列 */
+    justify-content: flex-start; /* 水平方向起始排列 */
+    /* padding: 5px; */
+    background-color: #fff;
+    width: 50%;
+    .stat-item {
+      width: 25%; /* 一行4个时，每个占25%宽度（简单示例，可结合实际需求微调） */
+      box-sizing: border-box;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      .stat-value {
+        font-family: "Hanchansans-Light";
+        font-size: 32rpx;
+        color: #333;
+        font-weight: bold;
+        line-height: 44rpx;
+      }
+
+      .stat-label {
+        font-size: 20rpx;
+        color: #000;
+      }
+    }
+  }
+  /* 钱包区域 */
+  .wallet-section {
+    width: 100%;
+    height: 120rpx;
+    margin: 20rpx 0 0 0;
+    position: relative;
+    background: linear-gradient(90deg, #f7f7f7 0%, #e4e4e4 100%);
+    .wallet-bg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .wallet-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #000;
+      .wallet-left {
+        margin-left: 60rpx;
+        .wallet-action {
+          font-size: 25rpx;
+        }
+      }
+      .wallet-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .wallet-label {
+          font-size: 24rpx;
+          color: #000;
+          margin-right: 30rpx;
+          margin-top: 4rpx;
+        }
+        .wallet-balance {
+          font-family: "Hanchansans-Light";
+          font-size: 36rpx;
+          font-weight: bold;
+          margin-right: 60rpx;
+        }
+      }
+    }
+  }
+  /* 预收入 累积收入 */
+  .wallet-section1 {
+    width: 100%;
+    height: 110rpx;
+    margin: 1rpx 0 20rpx 0;
+    position: relative;
+    background: linear-gradient(90deg, #f7f7f7 0%, #e4e4e4 100%);
+    .wallet-content1 {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #000;
+      .wallet-left1 {
+        display: flex;
+        flex-direction: column;
+        margin-left: 60rpx;
+        align-items: center;
+        .wallet-balance1 {
+          font-family: "Hanchansans-Light";
+        }
+      }
+
+      .wallet-right1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* ✅ 让数字和文字都水平居中 */
+        margin-right: 30rpx;
+        .wallet-balance1 {
+          font-family: "Hanchansans-Light";
+        }
+        .wallet-label1 {
+          font-size: 24rpx;
+          color: #000;
+        }
+      }
+    }
+  }
+  /* 地址 订单 优惠券 尺码 */
+  .four-section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* 允许换行 */
+    justify-content: space-between;
+    margin-top: 20rpx;
+    .four-item {
+      width: calc((100% - 10rpx - 10rpx) / 2);
+      height: 130rpx;
+      background-color: #f7f7f7;
+      margin-bottom: 20rpx; /* 上下间距 */
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 20rpx;
+      padding-left: 34rpx;
+      box-sizing: border-box;
+      .item-icon {
+        width: 85rpx;
+        height: 85rpx;
+        margin-right: 25rpx;
+        /* margin-bottom: 10rpx; */
+      }
+
+      .item-text {
+        font-size: 28rpx;
+        color: #333;
+      }
+    }
+  }
+  /*系统信息部分*/
+  /* 外层条目 */
+  .information-section {
+    display: flex;
+    justify-content: space-between; /* 左右分布 */
+    align-items: center; /* 垂直居中 */
+    height: 130rpx;
+    padding: 0 32rpx; /* 两侧留白 */
+    background: #f7f7f7;
+    /* 左侧区域 */
+    .information-left {
+      display: flex;
+      align-items: center;
+      gap: 20rpx; /* 图标与文字间距 */
+      .info-icon {
+        width: 85rpx;
+        height: 85rpx;
+      }
+
+      .info-title {
+        font-size: 28rpx;
+        color: #131313;
+        font-family: "AlibabaPuHuiTi-45";
+      }
+    }
+    /* 右侧区域 */
+    .information-right {
+      display: flex;
+      align-items: center;
+      gap: 16rpx; /* 文字与箭头间距 */
+      .unread-text {
+        font-size: 18rpx;
+        color: #131313;
+        font-family: "AlibabaPuHuiTi-45";
+      }
+
+      .arrow-icon {
+        width: 11rpx;
+        height: 19rpx;
+      }
+    }
+  }
+  /* 邀请好友部份 */
+  .invite-section {
+    position: relative;
+    width: 100%;
+    height: 200rpx;
+    margin: 20rpx 0;
+    .inviteFriend {
+      width: 100%;
+      height: 100%;
+    }
+    .invite-content {
+      position: absolute;
+      top: 50%;
+      left: 30rpx; /* 改这里：靠左显示 */
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* ✅ 左对齐 */
+      justify-content: center;
+      color: #000;
+      text-align: left; /* ✅ 文字左对齐 */
+      .invite-title {
+        font-size: 35rpx;
+        /* font-weight: bold; */
+        margin-bottom: 10rpx;
+      }
+      .invite-action {
+        display: flex;
+        align-items: center;
+        .invite-button-text {
+          font-size: 26rpx;
+          color: #000;
+        }
+        .next-icon {
+          width: 34rpx;
+          height: 24rpx;
+          margin-left: 10rpx;
+        }
+      }
+    }
+  }
+
+  .recom-text {
+    font-family: "AlibabaPuHuiTi-45";
+    font-size: 28rpx;
+  }
+  /* 商品列表 */
+  .goods-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    box-sizing: border-box;
+    margin-top: 30rpx;
+    padding-bottom: calc(110rpx + constant(safe-area-inset-bottom));
+    padding-bottom: calc(110rpx + env(safe-area-inset-bottom));
+    .goods-item {
+      width: calc((100% - 30rpx) / 2);
+      /* 两边10 + 中间10，总共30rpx */
+      background-color: #fff;
+      margin-bottom: 31rpx;
+      /* border-radius: 8rpx; */
+      overflow: hidden;
+      box-shadow: 0 0rpx 0rpx rgba(0, 0, 0, 0.05);
+      .goods-img {
+        width: 100%;
+        height: 450rpx;
+        aspect-ratio: 1 / 1;
+        background-color: #f8f8f8;
+        display: block;
+      }
+      .goods-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20rpx 0;
+        background-color: #f5f5f5;
+        .goods-title {
+          font-family: "AlibabaPuHuiTi-35";
+          display: block;
+          /* padding: 15rpx; */
+          font-size: 20rpx;
+          /* font-weight: bold; */
+          /* line-height: 36rpx; */
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 70%;
+          color: #000;
+        }
+        .goods-price {
+          font-family: "Hanchansans-Regular";
+          font-size: 22rpx;
+          color: #000;
+          margin-top: 3rpx;
+        }
+
+        .goods-sold {
+          font-size: 20rpx;
+          margin: 0 10rpx;
+          color: #999;
+        }
+      }
+    }
+    /* 加载中提示 */
+    .loading {
+      text-align: center;
+      padding: 30rpx 0;
+      color: #999;
+    }
+
+    /* 没有更多数据 */
+    .no-more {
+      text-align: center;
+      padding: 30rpx 0;
+      color: #999;
+    }
+  }
+}

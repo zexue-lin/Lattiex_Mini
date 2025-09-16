@@ -329,8 +329,13 @@ Page({
     Toast("点击了店铺");
   },
   openDialog(e) {
-    const type = e.currentTarget.dataset.type;
-    this.setData({ isAddCart: type == "addCart", showPurchasePop: true });
+    const token = wx.getStorageSync("token");
+    if (token) {
+    } else {
+      Toast.fail("未登陆");
+    }
+    // const type = e.currentTarget.dataset.type;
+    // this.setData({ isAddCart: type == "addCart", showPurchasePop: true });
   },
   /**
    * 生命周期函数--监听页面隐藏

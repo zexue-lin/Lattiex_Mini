@@ -1,0 +1,78 @@
+<!--packageA/pages/one_login/one_login.wxml-->
+<navigation-bar title="一键登录" back="{{ true }}" loading="{{loading}}" background="#ffffff" color="#000000">
+	<!-- 在右侧放一个按钮 -->
+	<!-- <view slot="right" bindtap="onSearchTap">
+      <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
+    </view> -->
+</navigation-bar>
+
+<view class="container1">
+	<!-- 头部返回 -->
+	<view class="header">
+		<view class="back-btn" bindtap="goBack">
+			<image src="https://zhenda.wdzhengda.com/uploads/home/ic-loginclose.png" mode="aspectFit"></image>
+			<!-- 替换为实际箭头图标路径 -->
+		</view>
+		<!-- 右侧 Logo 图片（点击同样跳一键登录）-->
+		<image class="logotext-img" src="https://zhenda.wdzhengda.com/uploads/home/logotext.png" mode="widthFix" />
+	</view>
+
+	<!-- 背景图 -->
+	<view class="login-background">
+		<!-- 三张图片叠在一起 -->
+		<image class="transmodel" wx:for="{{modelImages}}" wx:key="index" src="{{item.image}}" style="z-index: {{modelImages.length - index}}; opacity: {{ currentModelIndex === index ? 1 : 0 }};" />
+
+		<!-- slogan 图片居中放置 -->
+		<image class="slogan" src="https://zhenda.wdzhengda.com/uploads/home/Slogan.png" mode="aspectFit"></image>
+	</view>
+
+	<!-- 登录按钮 -->
+	<view class="phone-container">
+		<!--    <text class="phone"> 134****2345</text>-->
+		<!-- <button wx:if="{{!isAgreed}}" class="login-btn" style="width: 100%" bindtap="onBeforePhoneLogin">
+          手机号一键登录
+        </button> -->
+		<!-- 已勾选：系统授权按钮，才会弹出获取手机号 -->
+		<!-- <button wx:else class="login-btn" style="width: 100%"
+        open-type="getPhoneNumber"
+        bindgetphonenumber="getPhoneNumber">
+        手机号一键登录
+        </button> -->
+		<!-- 手机号的 -->
+		<button class="login-btn" style="width: 100%" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" loading="{{ loading }}" disabled="{{ loading }}">
+			{{ loading ? '登录中...' : '手机号一键登录' }}
+		</button>
+		<!-- 使用微信的五个参数登录，但是后端没写接口，后端只能通过手机号登录 -->
+		<!-- <button class="login-btn" style="width: 100%" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" loading="{{ loading }}" disabled="{{ loading }}">
+			{{ loading ? '登录中...' : '微信一键登录' }}
+		</button> -->
+
+		<!-- 当未同意时，用透明拦截层盖住按钮，第一次点只弹协议 -->
+		<view wx:if="{{!isAgreed}}" class="tap-cover" catchtap="openAgreementSheet"></view>
+
+		<!-- 底部协议弹窗 -->
+		<view wx:if="{{showAgreeSheet}}" class="mask" catchtouchmove="stopScroll" catchtap="closeAgreementSheet">
+			<view class="sheet" catchtap="noop">
+				<view class="sheet-title">请阅读并同意以下条款</view>
+				<view class="sheet-body">
+					同意
+					<text class="link" bindtap="openOneLoginProtocol">《中国移动账号服务条款》</text>
+					以及
+					<text class="link" bindtap="openProtocol">《用户协议》</text>
+					和
+					<text class="link" bindtap="openPrivacyPolicy">《隐私协议》</text>
+				</view>
+				<button class="agree-btn" style="width: 100%" bindtap="agreeAndContinue">同意并继续</button>
+				<view class="sheet-close" bindtap="closeAgreementSheet">取消</view>
+			</view>
+		</view>
+
+		<button class="other-btn" style="width: 100%" bindtap="otherBtn">其他帐号登录</button>
+		<view class="invite-action" bindtap="goRegister">
+			<text class="invite-button-text">去注册</text>
+			<image class="next-icon" src="https://zhenda.wdzhengda.com/uploads/mine/ic_next.png" mode="aspectFit" />
+		</view>
+	</view>
+
+
+</view>
