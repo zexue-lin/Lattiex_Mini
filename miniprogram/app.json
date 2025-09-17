@@ -16,7 +16,9 @@
 				"pages/goods_detail/goods_detail",
 				"pages/goods_list/goods_list",
 				"pages/search/search",
-				"pages/one_login/one_login"
+				"pages/one_login/one_login",
+				"pages/login/login",
+				"pages/verify_code/verify_code"
 			]
 		}
 	],

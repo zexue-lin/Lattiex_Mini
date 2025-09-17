@@ -1,0 +1,78 @@
+<!--packageA/pages/login/login.wxml-->
+<navigation-bar title="登录" back="{{ true }}" loading="{{loading}}" background="#ffffff" color="#000000">
+	<!-- 在右侧放一个按钮 -->
+	<!-- <view slot="right" bindtap="onSearchTap">
+      <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
+    </view> -->
+</navigation-bar>
+
+<view class="login-container">
+	<view class="header">
+		<view class="back-btn" bindtap="goBack">
+			<!-- <image src="https://zhenda.wdzhengda.com/uploads/mine/ic-back-b@2x.png" mode="aspectFit"></image> -->
+			<!-- 替换为实际箭头图标路径 -->
+		</view>
+		<!-- 右侧 Logo 图片（点击同样跳一键登录）-->
+		<image class="logotext-img" src="https://zhenda.wdzhengda.com/uploads/home/logotext.png" mode="widthFix" />
+	</view>
+
+	<text class="header-text">
+		WEHCOME ZHENDA !
+	</text>
+	<!-- 页面 / 组件 -->
+	<view class="tab-bar">
+		<!-- 手机号 + 密码登录 -->
+		<view class="tab-item {{ isPasswordLogin ? 'active' : '' }}" data-id="password" catchtap="switchTab">密码登录
+			<view class="indicator"></view>
+		</view>
+
+		<!-- 验证码登录 -->
+		<view class="tab-item {{ !isPasswordLogin ? 'active' : '' }}" data-id="code" catchtap="switchTab">验证码登录
+			<view class="indicator"></view>
+		</view>
+	</view>
+
+	<!-- 手机号输入框 -->
+	<view class="field1 {{activeField ==='mobile' ? 'active' : ''}}">
+		<input class="field-input" placeholder="请输入手机号码" data-key="mobile" bindfocus="handleFocus" bindblur="handleBlur" type="number" maxlength="11" placeholder-class="ph-style" bindinput="handlePhoneInput" value="{{phoneNumber}}"></input>
+		<!-- 清除图标，有内容时显示 -->
+		<image class="clear-icon" src="https://zhenda.wdzhengda.com/uploads/mine/icon_editdel.png" mode="widthFix" bindtap="clearPhoneInput" wx:if="{{phoneNumber.length > 0}}"></image>
+	</view>
+	<!-- 密码输入框 -->
+	<!-- 仅保留一个 input；用 wx:if 决定是否渲染，别再和 hidden 同时用 -->
+	<view class="field1 {{activeField === 'password' ? 'active' : ''}}" wx:if="{{isShowPasswordInput}}">
+		<input class="field-input" placeholder="请输入密码" data-key="password" bindfocus="handleFocus" bindblur="handleBlur" placeholder-class="ph-style" password="{{!isPasswordVisible}}" bindinput="handlePasswordInput" focus="{{passwordFocus}}" />
+		<image class="eye-icon" src="{{isPasswordVisible ? 'https://zhenda.wdzhengda.com/uploads/mine/ic-pw-display@2x.png' : 'https://zhenda.wdzhengda.com/uploads/mine/ic-pw-hide@2x.png'}}" bindtap="togglePasswordVisibility" mode="widthFix" />
+	</view>
+	<!-- 忘记密码 -->
+	<view class="forgot-password" bindtap="goToForgotPassword">忘记密码?</view>
+
+	<!-- 获取验证码按钮 -->
+	<button class="get-code-btn" style="width: 100%" bindtap="getVerificationCode" disabled="{{!isPhoneValid}}">{{loginText}}</button>
+
+	<view class="one-click-login" bindtap="oneClickLogin">一键快捷登录</view>
+
+	<!-- 登录方式图标容器 -->
+	<view class="login-box">
+		<view class="login-icons">
+			<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/wechat.png" mode="aspectFit" />
+			<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/tiktop.png" mode="aspectFit" />
+			<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/alipay.png" mode="aspectFit" />
+		</view>
+		<radio-group class="radio-wrap" bindtap="handleAgreementChange">
+			<label class="custom-radio-label">
+				<radio class="native-radio" checked="{{ isAgreed }}" />
+				<view class="fake-radio">
+					<!-- 用图片代替选中状态 -->
+					<image class="radio-checked-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-seleted.png" wx:if="{{ isAgreed }}" mode="aspectFill" />
+				</view>
+				<pre> <text class="agreement-text">登录即默认同意《<text class="protocol"
+                                                                    bindtap="openProtocol">用户协议</text>》《<text
+                    class="protocol" bindtap="openPrivacyPolicy">隐私政策</text>》
+            </text></pre>
+			</label>
+		</radio-group>
+
+
+	</view>
+</view>

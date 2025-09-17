@@ -102,36 +102,58 @@
       background-color: #f0f0f0;
       color: #131313;
     }
-    .sheet {
-      width: 100%;
-      background: #fff;
-      border-radius: 16rpx 16rpx 0 0;
-      padding: 32rpx;
-      .sheet-title {
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 20rpx;
-      }
-      .sheet-body {
-        font-family: "AlibabaPuHuiTi-45";
-        color: #666;
-        font-size: 24rpx;
-        line-height: 1.6;
-      }
-      .agree-btn {
-        font-family: "AlibabaPuHuiTi-45";
-        margin-top: 24rpx;
-        background: #131313;
-        color: #fff;
-        border-radius: 0;
-      }
-      .sheet-close {
-        font-family: "AlibabaPuHuiTi-45";
-        text-align: center;
-        color: #999;
-        padding: 20rpx 0;
+
+    .tap-cover {
+      position: absolute;
+      left: 0;
+      right: 0;
+      /* 把 cover 放到按钮的高度范围；如果按钮不在顶部，用 rpx 定位它具体位置 */
+      height: 44px;
+      background: rgba(0, 0, 0, 0);
+      z-index: 10;
+    }
+    .mask {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 999;
+      display: flex;
+      align-items: flex-end;
+      .sheet {
+        width: 100%;
+        background: #fff;
+        border-radius: 16rpx 16rpx 0 0;
+        padding: 32rpx;
+        .sheet-title {
+          font-weight: 600;
+          text-align: center;
+          margin-bottom: 20rpx;
+        }
+        .sheet-body {
+          font-family: "AlibabaPuHuiTi-45";
+          color: #666;
+          font-size: 24rpx;
+          line-height: 1.6;
+        }
+        .agree-btn {
+          font-family: "AlibabaPuHuiTi-45";
+          margin-top: 24rpx;
+          background: #131313;
+          color: #fff;
+          border-radius: 0;
+        }
+        .sheet-close {
+          font-family: "AlibabaPuHuiTi-45";
+          text-align: center;
+          color: #999;
+          padding: 20rpx 0;
+        }
       }
     }
+
     /* 去注册 */
     .invite-action {
       display: flex;
@@ -147,6 +169,105 @@
         width: 34rpx;
         height: 24rpx;
         margin-left: 10rpx;
+      }
+    }
+  }
+
+  .success-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .success-icon {
+      font-size: 120rpx;
+      color: #000;
+      margin-bottom: 30rpx;
+    }
+
+    .success-text {
+      font-size: 36rpx;
+      color: #333;
+      margin-bottom: 15rpx;
+    }
+    .success-desc {
+      font-size: 28rpx;
+      color: #666;
+    }
+  }
+  /* 登录方式 */
+  .login-icons {
+    width: 80%;
+    margin: 30rpx auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .icon-item {
+      width: 62rpx;
+      height: 62rpx;
+      border-radius: 50%;
+      padding: 12rpx;
+    }
+  }
+  /* 协议 */
+  .radio-wrap {
+    width: 100%;
+    margin-bottom: 30rpx;
+    display: flex;
+    justify-content: center;
+    /* label 容器布局 */
+    .custom-radio-label {
+      display: flex;
+      align-items: center;
+      .native-radio {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+      }
+      /* 外部圆圈 */
+      .fake-radio {
+        width: 19rpx;
+        height: 19rpx;
+        border: 1rpx solid #999;
+        position: relative;
+        background-color: #fff;
+        overflow: hidden;
+        margin-top: 5rpx;
+        /* 关键 */
+        .radio-checked-icon {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+      /* 勾选状态去掉边框 */
+      .fake-radio.checked {
+        border: 1rpx solid #fff;
+      }
+
+      .agreement-checkbox {
+        background-color: transparent;
+        left: 0;
+        bottom: 0;
+        margin-right: 0rpx;
+        transform: scale(0.5);
+        /* ✅ 控制大小：0.7 是缩小70% */
+      }
+      .agreement-text {
+        font-size: 23rpx;
+        justify-content: left;
+        margin-left: 16rpx;
+      }
+      .protocol {
+        color: #000;
       }
     }
   }

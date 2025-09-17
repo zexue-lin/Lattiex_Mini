@@ -2,6 +2,33 @@
 // 全局数据共享池
 import { observable, action } from "mobx-miniprogram";
 
+// 登录后跳回原来的页面
+export type OpenType = "navigateTo" | "redirectTo" | "switchTab" | "reLaunch" | "back";
+export interface RedirectInfo {
+  /** 登录后怎么回去：优先 back（若能算出 delta），否则按 url + openType
+	 * 1) openType 该怎么选？
+
+		"back"：默认优先用它，表示“登录完直接返回到当前来源页”（不重新创建页面，保留页面状态）。
+
+		"switchTab"：目标页是 tabBar 时必须用它。
+
+		"redirectTo"：想用同一路由替换当前页（不增加栈层数）。
+
+		"navigateTo"：登录后要新开一个普通页面（加一层栈），一般很少用在“回跳”。
+
+		"reLaunch"：清空栈后重开一个页面（如登录后想回到一个干净的首页流程）。
+
+		实战建议：能 back 就 back；目标是 tabBar 再用 switchTab；其他少数场景再用 redirectTo。
+	 */
+  openType: OpenType;
+  /** 来源页的路由（以 / 开头，如 /packageA/pages/good_detail/good_detail） */
+  url: string;
+  /** 页面参数（会拼接到 url 上） */
+  params?: Record<string, any>;
+  /** 若来源是 tabBar，记录它的索引，登录成功 switchTab 时恢复选中态 */
+  tabIndex?: number;
+}
+
 export type PointsBanner = {
   banner_img: string;
   banner_img_src: string;
@@ -29,6 +56,10 @@ interface IStore {
   // ✅ 新增：banner 列表
   pointsBannerList: PointsBanner[];
   setPointsBannerList(list: PointsBanner[]): void;
+
+  // ✅新增：登录后跳转信息
+  redirectInfo: RedirectInfo | null;
+  setRedirectInfo(info: RedirectInfo | null): void;
 
   updateSafeBottom(px: number): void;
 }
@@ -60,6 +91,12 @@ export const store = observable<IStore>({
   }),
   updateNumCartNumReduce: action(function (this: IStore, step: number) {
     this.cartNum += step;
+  }),
+
+  // 新增
+  redirectInfo: null,
+  setRedirectInfo: action(function (this: IStore, info: RedirectInfo | null) {
+    this.redirectInfo = info;
   }),
 
   // ✅ 新增：更新 safeBottom

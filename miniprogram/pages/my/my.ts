@@ -1,4 +1,6 @@
 // pages/my/my.ts
+import { store } from "../../store/store";
+import { getCurrentPageInfo } from "../../utils/util";
 Page({
   /**
    * 页面的初始数据
@@ -74,7 +76,14 @@ Page({
       });
     } else {
       console.log("没登录呢");
-
+      // 拿到当前页面的信息
+      const { url, params } = getCurrentPageInfo();
+      store.setRedirectInfo({
+        openType: "switchTab",
+        url,
+        params,
+        tabIndex: 4,
+      });
       wx.navigateTo({
         url: "/packageA/pages/one_login/one_login",
       });

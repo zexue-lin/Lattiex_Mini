@@ -2,6 +2,7 @@ import { reserveArrayBuffer } from "mobx-miniprogram/dist/internal";
 
 import Toast from "@vant/weapp/toast/toast";
 import { store } from "../../../store/store";
+import { getCurrentPageInfo } from "../../../utils/util";
 // packageA/pages/goods_detail/goods_detail.ts
 Page({
   /**
@@ -333,6 +334,15 @@ Page({
     if (token) {
     } else {
       Toast.fail("未登陆");
+      const { url, params } = getCurrentPageInfo();
+      store.setRedirectInfo({
+        openType: "back",
+        url,
+        params,
+      });
+      wx.navigateTo({
+        url: "/packageA/pages/one_login/one_login",
+      });
     }
     // const type = e.currentTarget.dataset.type;
     // this.setData({ isAddCart: type == "addCart", showPurchasePop: true });

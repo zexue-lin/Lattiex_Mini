@@ -10,7 +10,7 @@
 	<!-- 头部返回 -->
 	<view class="header">
 		<view class="back-btn" bindtap="goBack">
-			<image src="https://zhenda.wdzhengda.com/uploads/home/ic-loginclose.png" mode="aspectFit"></image>
+			<!-- <image src="https://zhenda.wdzhengda.com/uploads/home/ic-loginclose.png" mode="aspectFit"></image> -->
 			<!-- 替换为实际箭头图标路径 -->
 		</view>
 		<!-- 右侧 Logo 图片（点击同样跳一键登录）-->
@@ -74,5 +74,33 @@
 		</view>
 	</view>
 
+	<!-- 登录成功提示 -->
+	<!-- <view class="success-modal" wx:if="{{ loginSuccess }}">
+		<view class="success-icon">
+			<text class="iconfont icon-success"></text>
+		</view>
+		<view class="success-text">登录成功</view>
+		<view class="success-desc">正在为您跳转...</view>
+	</view> -->
 
+	<!-- 登录方式图标容器 -->
+	<view class="login-icons">
+		<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/wechat.png" mode="aspectFit" />
+		<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/tiktop.png" mode="aspectFit" />
+		<image class="icon-item" src="https://zhenda.wdzhengda.com/uploads/home/alipay.png" mode="aspectFit" />
+	</view>
+	<!-- 协议勾选  《<text class="protocol" bindtap="openOneLoginProtocol">中国移动认证服务条款</text>》、 -->
+
+	<!-- 协议 -->
+	<radio-group class="radio-wrap">
+		<label class="custom-radio-label">
+			<radio class="native-radio" checked="{{ isAgreed }}" />
+			<view class="fake-radio {{isAgreed ? 'checked' : '' }}" bindtap="handleAgreementChange">
+				<!-- 用图片代替选中状态 -->
+				<image class="radio-checked-icon" src="https://zhenda.wdzhengda.com/uploads/home/ic-seleted.png" wx:if="{{ isAgreed }}" mode="aspectFill" />
+			</view>
+			<pre> <text class="agreement-text">阅读并同意 《<text class="protocol" bindtap="openProtocol">用户协议</text>》、《<text
+                    class="protocol" bindtap="openPrivacyPolicy">隐私政策</text>》</text></pre>
+		</label>
+	</radio-group>
 </view>

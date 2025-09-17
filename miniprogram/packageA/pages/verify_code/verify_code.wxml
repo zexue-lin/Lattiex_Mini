@@ -1,0 +1,44 @@
+<!--packageA/pages/verify_code/verify_code.wxml-->
+<navigation-bar title="登录" back="{{ true }}" loading="{{loading}}" background="#ffffff" color="#000000">
+	<!-- 在右侧放一个按钮 -->
+	<!-- <view slot="right" bindtap="onSearchTap">
+      <image src="https://zhenda.wdzhengda.com/uploads/home/ic-search-cart.png" style="width: 32rpx; height: 32rpx;" />
+    </view> -->
+</navigation-bar>
+<view class="code_container">
+	<!-- 返回按钮 -->
+	<view class="header">
+		<view class="back-btn" bindtap="goBack">
+			<!-- <image src="https://zhenda.wdzhengda.com/uploads/mine/ic-back-b@2x.png" mode="aspectFit"></image> -->
+			<!-- 替换为实际箭头图标路径 -->
+		</view>
+		<!-- 右侧 Logo 图片（点击同样跳一键登录）-->
+		<image class="logotext-img" src="https://zhenda.wdzhengda.com/uploads/home/logotext.png" mode="widthFix" />
+	</view>
+	<text class="header-text">
+		WEHCOME ZHENDA !
+	</text>
+
+	<!-- 内容区域 -->
+	<view class="content">
+		<view class="title">输入验证码</view>
+		<view class="desc">已发送至{{phoneNumber}}</view>
+
+		<!-- 验证码输入区域 -->
+		<view class="verificationCode">
+			<input type="number" maxlength="4" bindinput="inputValue" focus />
+			<view class="{{veCode[0] ? 'activeView' : 0}}">{{veCode[0]}}</view>
+			<view class="{{veCode[1] ? 'activeView' : 0}}">{{veCode[1]}}</view>
+			<view class="{{veCode[2] ? 'activeView' : 0}}">{{veCode[2]}}</view>
+			<view class="{{veCode[3] ? 'activeView' : 0}}">{{veCode[3]}}</view>
+		</view>
+
+		<!-- 倒计时/重发 -->
+		<view class="countdown" wx:if="{{countdown > 0}}">
+			({{countdown}}秒后重新发送)
+		</view>
+		<view class="resend" wx:else bindtap="resendCode">
+			重新发送
+		</view>
+	</view>
+</view>

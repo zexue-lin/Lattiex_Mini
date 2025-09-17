@@ -1,0 +1,9 @@
+{
+	"navigationStyle": "custom",
+	"enablePullDownRefresh": true,
+	"usingComponents": {
+		"navigation-bar": "/components/navigation-bar/navigation-bar",
+		"van-checkbox": "@vant/weapp/checkbox/index",
+		"van-checkbox-group": "@vant/weapp/checkbox-group/index"
+	}
+}

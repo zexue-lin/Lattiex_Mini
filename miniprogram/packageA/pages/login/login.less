@@ -1,0 +1,248 @@
+/* packageA/pages/login/login.wxss */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 40rpx;
+  background-color: #fff;
+  min-height: 100vh;
+  /* 头部容器：水平排列 + 两端对齐 */
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20rpx;
+    margin-bottom: 50rpx;
+    padding: 0 40rpx 0 0; /* 想再靠里就调大，如 60rpx */
+    box-sizing: border-box;
+    /* 返回按钮样式 */
+    .back-btn {
+      width: 40rpx;
+      /* 按钮宽度 */
+      height: 40rpx;
+      /* 按钮高度 */
+      & image {
+        width: 100%;
+        /* 图片宽度填满容器 */
+        height: 100%;
+        /* 图片高度填满容器 */
+        object-fit: contain;
+        /* 保持图片比例，避免变形 */
+      }
+    }
+    .logotext-img {
+      width: 100rpx;
+      height: 30rpx;
+    }
+  }
+  .header-text {
+    font-size: 40rpx; /* 原有字号，如已设置可删除此行 */
+    letter-spacing: 4rpx; /* 字间距——可按设计调整 */
+    margin-bottom: 50rpx; /* 与下方内容间隔 50rpx */
+    display: block; /* 让 margin-bottom 生效 */
+    font-weight: 600;
+  }
+
+  /* 容器：水平排列 */
+  /* 容器：水平排列 */
+  .tab-bar {
+    display: flex;
+    align-items: flex-start;
+    gap: 48rpx;
+    margin-bottom: 50rpx;
+  }
+
+  /* 每个标题 */
+  .tab-item {
+    position: relative; /* 用于定位下方指示器 */
+    color: #8b8b8b; /* 未选中文字颜色 */
+    font-family: "AlibabaPuHuiTi-45";
+    font-weight: normal;
+    font-size: 32rpx;
+    color: #131313;
+
+    &.active {
+      color: #131313;
+      font-weight: 600;
+    }
+  }
+
+  /* 指示器：默认隐藏 */
+  .indicator {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -12rpx;
+    display: none; /* 未选中不显示 */
+    height: 8rpx;
+    align-items: center;
+
+    &::before {
+      content: "";
+      width: 5rpx;
+      height: 5rpx;
+      background: #131313;
+      border-radius: 50%;
+    }
+    &::after {
+      content: "";
+      width: 64rpx; /* 横条长度 */
+      height: 5rpx; /* 横条厚度 */
+      background: #131313;
+      border-radius: 2rpx;
+      margin-left: 6rpx; /* 点与条的间距 */
+    }
+  }
+
+  /* 激活时显示指示器 —— 注意放在 .indicator 后面以覆盖 display:none */
+  .tab-item {
+    &.active {
+      .indicator {
+        display: flex;
+      }
+    }
+  }
+
+  .field1 {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #8b8b8b; /* 默认浅灰 */
+    margin-bottom: 80rpx;
+    /* 输入框样式 */
+    .field-input {
+      width: 100%;
+      font-size: 28rpx;
+      padding: 0 4rpx 6rpx 0;
+      /*border-bottom: 1rpx solid #000000;*/
+      box-sizing: border-box;
+    }
+    .clear-icon {
+      width: 40rpx;
+      height: 40rpx;
+      margin-left: 16rpx;
+    }
+
+    .eye-icon {
+      width: 40rpx;
+      height: 40rpx;
+      margin-left: 16rpx;
+    }
+  }
+
+  .field1.active {
+    border-bottom: 1px solid #000; /* 聚焦时改为黑色 */
+  }
+  .forgot-password {
+    font-family: "AlibabaPuHuiTi-45";
+    width: 100%;
+    text-align: right;
+    color: #131313;
+    font-size: 28rpx;
+    margin: 20rpx 0;
+  }
+
+  /* 获取验证码按钮样式 */
+  /* 顶部黑色实心按钮：登录 / 获取验证码 */
+  .get-code-btn {
+    font-family: "AlibabaPuHuiTi-45";
+    font-size: 32rpx;
+    width: 100%;
+    height: 80rpx;
+    background-color: #131313;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+  }
+  /* 禁用态颜色淡一点，可选 */
+  .get-code-btn[disabled] {
+    background: #d8d8d8;
+    color: #fff;
+  }
+  /* 底部描边按钮：一键登录 */
+  .one-click-login {
+    width: 100%;
+    height: 80rpx;
+    line-height: 80rpx;
+    margin-top: 24rpx;
+    background: #fff; /* 白底 */
+    color: #131313; /* 黑字 */
+    font-size: 32rpx;
+    text-align: center;
+    border: 1rpx solid #000; /* 黑色细描边 */
+  }
+
+  .login-box {
+    display: flex;
+    justify-content: center;
+    /* 登录方式 */
+    .login-icons {
+      position: fixed;
+      width: 80%;
+      margin: 30rpx auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      left: 0;
+      right: 0;
+      bottom: 197rpx;
+      .icon-item {
+        width: 62rpx;
+        height: 62rpx;
+        border-radius: 50%;
+        padding: 12rpx;
+      }
+    }
+    /* 协议 */
+    .radio-wrap {
+      position: fixed;
+      width: 100%;
+      margin-bottom: 30rpx;
+      bottom: 100rpx;
+      display: flex;
+      justify-content: center;
+      /* label 容器布局 */
+      .custom-radio-label {
+        display: flex;
+        align-items: center;
+        .native-radio {
+          position: absolute;
+          width: 0;
+          height: 0;
+          opacity: 0;
+        }
+        /* 外部圆圈 */
+        .fake-radio {
+          width: 20rpx;
+          height: 20rpx;
+          border: 1rpx solid #999;
+          position: relative;
+          background-color: #fff;
+          overflow: hidden; /* 关键 */
+          .radio-checked-icon {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            .agreement-checkbox {
+              background-color: transparent;
+              left: 0;
+              bottom: 0;
+              margin-right: 0rpx;
+              transform: scale(0.5); /* ✅ 控制大小：0.7 是缩小70% */
+            }
+          }
+        }
+        .agreement-text {
+          font-size: 23rpx;
+          justify-content: left;
+          margin-left: 16rpx;
+          .protocol {
+            color: #007aff;
+          }
+        }
+      }
+    }
+  }
+}
