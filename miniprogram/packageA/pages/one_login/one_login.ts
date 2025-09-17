@@ -1,5 +1,6 @@
 import { reserveArrayBuffer } from "mobx-miniprogram/dist/internal";
 import { redirectAfterLogin } from "../../../utils/post_login";
+import { store } from "../../../store/store";
 interface ApiResp<T> {
   status: boolean;
   msg: string;
@@ -63,6 +64,12 @@ Page({
     this.setData({
       canIUseGetPhoneNumber: wx.canIUse("button.open-type.getPhoneNumber"),
     });
+    // 不用写这个的原因是这两个只是请求参数，不需要在wxml里面渲染，所以没必要用 mobx-miniprogram-bindings 把它们同步到页面 data。
+    // 购物车需要写就是因为购物车里面需要用这个数字绑定到页面上
+    // this.storeBindings = createStoreBindings(this, {
+    //   store,
+    //   fields: ["wx_appid", "wx_app_secret"],
+    // });
   },
   // bindGetUserInfo(e) {
   //   // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
@@ -156,8 +163,8 @@ Page({
       return;
     }
 
-    const iv = e.detail?.iv;
-    const encryptedData = e.detail?.encryptedData;
+    const iv = e.detail.iv;
+    const encryptedData = e.detail.encryptedData;
     if (!iv || !encryptedData) {
       wx.showToast({ title: "用户拒绝授权", icon: "none" });
       return;
@@ -167,24 +174,41 @@ Page({
     try {
       // 1) 获取登录凭证 code
       const loginRes = await wxLogin();
-      if (!loginRes?.code) {
+      if (!loginRes.code) {
         wx.showToast({ title: "获取登录凭证失败", icon: "none" });
         return;
       }
 
       const app = getApp<IAppOption>();
+      // 从 store 取；若为空再尝试缓存兜底
+      let appid = store.wx_appid;
+      let secret = store.wx_app_secret;
+      if (!appid) {
+        try {
+          const cached = wx.getStorageSync("wx_mini_cfg");
+          if (cached && cached.appid) {
+            appid = cached.appid;
+            secret = cached.secret || "";
+          }
+        } catch (_) {}
+      }
+
+      if (!appid || !secret) {
+        wx.showToast({ title: "小程序配置缺失，请稍后重试", icon: "none" });
+        return null;
+      }
       // 2) 发送到服务端解密手机号
       const miniResp = await app.$http.post<ApiResp<WxMiniLoginData>>("", {
         method: "user.wxminilogin",
-        appid: "wxf0fa64c918890e88", // TODO: 从配置读取
-        secret: "ed4cc295236ef8ccc7fdc0007dcbc022", // TODO: 从配置读取
+        appid,
+        secret,
         js_code: loginRes.code,
         grant_type: "authorization_code",
         encryptedData,
         iv,
       } as WxMiniLoginPayload);
 
-      if (!miniResp.status || !miniResp.data?.mobile) {
+      if (!miniResp.status || !miniResp.data.mobile) {
         wx.showToast({ title: miniResp.msg || "登录失败", icon: "none" });
         return;
       }

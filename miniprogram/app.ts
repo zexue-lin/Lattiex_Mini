@@ -1,6 +1,7 @@
 // app.ts
-import { $http } from './utils/request'
-import { config } from './utils/config'
+import { $http } from "./utils/request";
+import { config } from "./utils/config";
+import { store } from "./store/store";
 
 App<IAppOption>({
   globalData: {
@@ -8,46 +9,54 @@ App<IAppOption>({
   },
   onLaunch() {
     // 配置 baseUrl
-    $http.baseUrl = config.baseUrl
+    $http.baseUrl = config.baseUrl;
 
     // ✅ 挂到 App 实例，页面就能 getApp().$http
     // 防御性分号（断句），防止编译成js的时候跟上面一句连在一起了，这里明确告诉JS。跟上一行没关系
     // 遇到 (、[、` 开头的语句 → 前面必须写分号。
-    ;(this as any).$http = $http
+    (this as any).$http = $http;
 
     // 配置拦截器
-    $http.setRequestInterceptor(options => {
-      const token = wx.getStorageSync('token')
+    $http.setRequestInterceptor((options) => {
+      const token = wx.getStorageSync("token");
       if (token) {
         options.header = {
           ...options.header,
           Authorization: `Bearer ${token}`,
-        }
+        };
       }
-      wx.showLoading({ title: '加载中...' })
-      return options
-    })
+      wx.showLoading({ title: "加载中..." });
+      return options;
+    });
 
     $http.setResponseInterceptor((res: any) => {
-      wx.hideLoading()
+      wx.hideLoading();
       if (res.statusCode !== 200) {
-        wx.showToast({ title: '请求失败', icon: 'none' })
-        return Promise.reject(res)
+        wx.showToast({ title: "请求失败", icon: "none" });
+        return Promise.reject(res);
       }
-      return res.data
-    })
+      return res.data;
+    });
 
     // 展示本地存储能力
-    const logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    const logs = wx.getStorageSync("logs") || [];
+    logs.unshift(Date.now());
+    wx.setStorageSync("logs", logs);
 
     // 登录
     wx.login({
-      success: res => {
-        console.log(res.code)
+      success: (res) => {
+        console.log(res.code);
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       },
-    })
+    });
+
+    // 可选增强：在 app.ts 的 onLaunch 里把缓存回填到 store（防止用户直接打开登录页时还没请求到配置）：
+    const cached = wx.getStorageSync("wx_mini_cfg");
+    if (cached && cached.appid) {
+      console.log("拿到了小程序配置");
+
+      store.setWxMiniConfig(cached.appid, cached.secret || "");
+    }
   },
-})
+});

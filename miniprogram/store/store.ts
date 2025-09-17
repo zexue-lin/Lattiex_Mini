@@ -50,6 +50,11 @@ interface IStore {
   numB: number;
   readonly sum: number;
 
+  // ✅ 新增：微信小程序配置
+  wx_appid: string;
+  wx_app_secret: string;
+  setWxMiniConfig(appid: string, secret: string): void;
+
   // ✅ 新增：底部安全区像素
   safeBottom: number;
 
@@ -75,6 +80,19 @@ export const store = observable<IStore>({
   get sum() {
     return this.numA + this.numB;
   },
+
+  // ===== 新增：小程序配置，默认空
+  wx_appid: "",
+  wx_app_secret: "",
+  setWxMiniConfig: action(function (this: IStore, appid: string, secret: string) {
+    this.wx_appid = appid || "";
+    this.wx_app_secret = secret || "";
+    // 可选：本地缓存，避免冷启动还没拉到配置
+    try {
+      wx.setStorageSync("wx_mini_cfg", { appid: this.wx_appid, secret: this.wx_app_secret });
+    } catch (_) {}
+  }),
+
   // ✅ 默认 0
   safeBottom: 0,
 

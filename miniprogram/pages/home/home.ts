@@ -57,7 +57,7 @@ Page({
     this.storeBindings = createStoreBindings(this, {
       store,
       fields: ["safeBottom", "pointsBannerList"], // 直接拿来用
-      actions: ["setPointsBannerList"], // 若需要直接调用 action，也可以写在 actions
+      actions: ["setPointsBannerList","setWxMiniConfig"], // 若需要直接调用 action，也可以写在 actions
     });
   },
 
@@ -77,6 +77,8 @@ Page({
       const title2Arr = (res.tutor_activity_intro || "").split("&");
       const title3Arr = (res.topic_img || "").split("&");
       const title4Arr = (res.top_img || "").split("&");
+      // ✅ 写入小程序 appid/secret 到 store
+      store.setWxMiniConfig(res.wx_appid || "", res.wx_app_secret || "");
       // 把banner列表放进store
       store.setPointsBannerList(res.points_banner_list || []);
       this.setData({

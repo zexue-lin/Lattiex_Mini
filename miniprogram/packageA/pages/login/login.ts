@@ -204,7 +204,7 @@ Page({
       }
     } catch (e: any) {
       // 你的 $http 一般会在拦截器里抛错到这里
-      wx.showToast({ title: e?.msg || e?.message || "网络请求失败", icon: "none" });
+      wx.showToast({ title: e.msg || e.message || "网络请求失败", icon: "none" });
     } finally {
       this.setData({ loading: false });
     }

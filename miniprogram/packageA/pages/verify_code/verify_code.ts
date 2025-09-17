@@ -31,8 +31,8 @@ Page({
     loading: false, // 提交中状态
   },
 
-  onLoad(options: { phoneNumber?: string }) {
-    const phoneNumber = options?.phoneNumber ?? "";
+  onLoad(options: { phoneNumber: string }) {
+    const phoneNumber = options.phoneNumber;
     this.setData({ phoneNumber });
     this.startCountdown();
     // 注意：通常是上个页面发送成功后才跳转过来，所以这里不自动再发一次
